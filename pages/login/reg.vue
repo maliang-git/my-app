@@ -1,6 +1,10 @@
 <template>
 	<view class="container">
-		<image class="user_head" src="../../static/logo.png" mode=""></image>
+		<!-- <Logo></Logo> -->
+		<view class="input_box">
+			<uni-icons class="icon" type="person" size="28" color="#555555"></uni-icons>
+			<input placeholder="请输入昵称" v-model="formData.loginName" maxlength="10"></input>
+		</view>
 		<view class="input_box">
 			<uni-icons class="icon" type="phone" size="28" color="#555555"></uni-icons>
 			<input type="number" placeholder="请输入手机号" v-model="formData.phone" maxlength="11"></input>
@@ -9,9 +13,13 @@
 			<uni-icons class="icon" type="locked" size="28" color="#555555"></uni-icons>
 			<input placeholder="请输入密码" v-model="formData.passWord" :password="pawIsShow" maxlength="20"></input>
 		</view>
-		<button class="sumit_btn" style="width:100%;" @click="regHandel">立即登录</button>
+		<view class="input_box">
+			<uni-icons class="icon" type="locked" size="28" color="#555555"></uni-icons>
+			<input placeholder="确认密码" v-model="formData.confirmPaw" :password="confirmPawIsShow" maxlength="20"></input>
+		</view>
+		<button class="sumit_btn" style="width:100%;" @click="regHandel">立即注册</button>
 		<view class="regin">
-			<navigator class="reg-btn" url="/pages/login/reg" hover-class="none">注册账号</navigator>
+			<navigator class="reg-btn" url="/pages/login/login" hover-class="none">用户登录</navigator>
 		</view>
 	</view>
 </template>
@@ -47,21 +55,17 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		justify-content: center;
 		width: 100%;
 		height: calc(100vh - 44px);
 		margin: 0 auto;
 		padding: 0 24px;
 		overflow: hidden;
 		box-sizing: border-box;
-		padding-top: 120upx;
 		.user_head{
-			width: 180upx;
-			height: 180upx;
-			margin-bottom: 80upx;
-			border-radius: 50%;
-			overflow: hidden;
+			width: 120upx;
+			height: 120upx;
 		}
-
 		>.input_box {
 			width: 100%;
 			position: relative;

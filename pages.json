@@ -28,6 +28,12 @@
 			"style": {
 				"navigationBarTitleText": "用户登录"
 			}
+		},
+		{
+			"path": "pages/login/reg",
+			"style": {
+				"navigationBarTitleText": "用户注册"
+			}
 		}
 	],
 	"tabBar": {
