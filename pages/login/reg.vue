@@ -43,6 +43,12 @@
 			}
 		},
 		methods: {},
+		mounted() {
+			console.log(111,this.$http)
+			this.$http.get('/api/user-center/register',this.formData).then(res=>{
+				console.log(res)
+			})
+		}
 	}
 </script>
 
