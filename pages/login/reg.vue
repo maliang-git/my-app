@@ -45,9 +45,10 @@
 		methods: {},
 		mounted() {
 			console.log(111,this.$http)
-			this.$http.get('/api/user-center/register',this.formData).then(res=>{
-				console.log(res)
-			})
+			this.$http('POST','/user-center/register')
+			// this.$http.get('/api/user-center/register',this.formData).then(res=>{
+			// 	console.log(res)
+			// })
 		}
 	}
 </script>

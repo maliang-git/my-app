@@ -1,44 +1,47 @@
 // import urlConfig from './config.js'
-const urlConfig = 'http://127.0.0.1:3002'
+const urlConfig = {
+	baseUrl: 'http://127.0.0.1:3002'
+}
 const request = {}
 const headers = {}
 
-request.globalRequest = (url, method, data, power) => {
-	/*     权限判断 因为有的接口请求头可能需要添加的参数不一样，所以这里做了区分
-	    1 == 不通过access_token校验的接口
-	    2 == 文件下载接口列表
-	    3 == 验证码登录 */
-
-	switch (power) {
-		case 1:
-			headers['Authorization'] = 'Basic a3N1ZGk6a3N1ZGk='
-			break;
-		case 2:
-			headers['Authorization'] = 'Basic a3N1ZGlfcGM6a3N1ZGlfcGM='
-			break;
-		case 3:
-			responseType = 'blob'
-			break;
-		default:
-			headers["Content-Type"] =  'application/json;charset=UTF-8';
-			// headers["content-type"] = "application/x-www-form-urlencoded";
-			// headers['TENANT-ID'] = this.$store.getters.userInfo.tenant_id
-			break;
+// method 请求类型 *大写
+// url 请求地址
+// data 参数
+// power 请求头 传入格式：示例 {headers:{'Content-Type':'application/json;charset=UTF-8'}}
+// domain 请求域名
+export default request.globalRequest = (method, url, data, domain, power) => {
+	headers["Content-Type"] = 'application/json;charset=UTF-8';
+	headers['request-origin'] = 'WAP'
+	if (power && power.headers) {
+		Object.keys(power.headers).forEach((key) => {
+			headers[key] = power.headers[key]
+		})
 	}
-
+	if (domain) {
+		url = urlConfig[domain] + url
+	} else {
+		url = urlConfig.baseUrl + url
+	}
+	
 	return uni.request({
-		url: urlConfig + url,
+		url,
 		method,
-		data: {
-			loginName: "",
-			phone: "",
-			passWord: "",
-			confirmPaw: ""
-		},
+		data,
 		dataType: 'json',
 		header: headers,
 	}).then(res => {
-		return res[1]
+		if (res[1] && res[1].data) {
+			const result = res[1].data;
+			const code = res[1].code;
+			if (code === 5223) {
+				console.log('未登录')
+				redirect("/");
+			}
+			return res[1]
+		} else {
+			throw res[1].data
+		}
 	}).catch(parmas => {
 		switch (parmas.code) {
 			case 401:
@@ -49,10 +52,8 @@ request.globalRequest = (url, method, data, power) => {
 					title: parmas.message,
 					icon: 'none'
 				})
-				return Promise.reject()
+				return Promise.reject(parmas);
 				break
 		}
 	})
 }
-request.globalRequest('/user-center/register','POST')
-export default request
