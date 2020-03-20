@@ -38,17 +38,57 @@
 					passWord: "",
 					confirmPaw: ""
 				},
-				pawIsShow:false,
-				confirmPawIsShow:false,
+				pawIsShow: false,
+				confirmPawIsShow: false,
 			}
 		},
-		methods: {},
-		mounted() {
-			console.log(111,this.$http)
-			this.$http('POST','/user-center/register')
-			// this.$http.get('/api/user-center/register',this.formData).then(res=>{
-			// 	console.log(res)
-			// })
+		methods: {
+			// 注册
+			regHandel() {
+				if (this.formData.loginName === '') {
+					uni.showToast({
+						title: '请输入昵称',
+						icon: "none"
+					});
+					return
+				}
+				if (!/^(1)[2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.formData.phone)) {
+					uni.showToast({
+						title: '手机号有误',
+						icon: "none"
+					});
+					return
+				}
+				if (this.formData.passWord === '' || this.formData.passWord.length < 5) {
+					uni.showToast({
+						title: '请输入5位以上的密码',
+						icon: "none"
+					});
+					return
+				}
+				if (this.formData.confirmPaw !== this.formData.passWord) {
+					uni.showToast({
+						title: '两次密码输入不一致',
+						icon: "none"
+					});
+					return
+				}
+				this.$http('POST', '/user-center/register', this.formData).then(res => {
+					console.log(res)
+					if (res.code === 200) {
+						uni.showToast({
+							title: res.msg,
+							icon: "none"
+						});
+						
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: "none"
+						});
+					}
+				})
+			}
 		}
 	}
 </script>
@@ -69,10 +109,12 @@
 		padding: 0 24px;
 		overflow: hidden;
 		box-sizing: border-box;
-		.user_head{
+
+		.user_head {
 			width: 120upx;
 			height: 120upx;
 		}
+
 		>.input_box {
 			width: 100%;
 			position: relative;
