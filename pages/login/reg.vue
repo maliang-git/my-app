@@ -1,6 +1,5 @@
 <template>
 	<view class="container">
-		<!-- <Logo></Logo> -->
 		<view class="input_box">
 			<uni-icons class="icon" type="person" size="28" color="#555555"></uni-icons>
 			<input placeholder="请输入昵称" v-model="formData.loginName" maxlength="10"></input>
@@ -33,10 +32,10 @@
 		data() {
 			return {
 				formData: {
-					loginName: "",
-					phone: "",
-					passWord: "",
-					confirmPaw: ""
+					loginName: "测试",
+					phone: "18142566233",
+					passWord: "123456",
+					confirmPaw: "123456"
 				},
 				pawIsShow: false,
 				confirmPawIsShow: false,
@@ -73,14 +72,17 @@
 					});
 					return
 				}
+				uni.showLoading();
 				this.$http('POST', '/user-center/register', this.formData).then(res => {
-					console.log(res)
+					uni.hideLoading();
 					if (res.code === 200) {
 						uni.showToast({
 							title: res.msg,
 							icon: "none"
 						});
-						
+						setTimeout(()=>{
+							uni.navigateBack(-1)
+						},1500)
 					} else {
 						uni.showToast({
 							title: res.msg,

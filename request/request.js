@@ -1,11 +1,11 @@
 // import urlConfig from './config.js'
 const urlConfig = {
-    baseUrl: "http://127.0.0.1:3002"
+    baseUrl: "http://172.20.10.9:3002"
 };
 const request = {};
 const headers = {};
 
-// method 请求类型 *大写
+// method 请求类型 *大写r
 // url 请求地址
 // data 参数
 // power 请求头 传入格式：示例 {headers:{'Content-Type':'application/json;charset=UTF-8'}}
@@ -33,15 +33,14 @@ export default request.globalRequest = (method, url, data, domain, power) => {
             header: headers
         })
         .then(res => {
-            if (res[1] && res[1].data) {
-                const code = res[1].code;
-                if (code === 5223) {
+            if (res[1] && res[1].statusCode == 200) {
+                if (res[1].data.code === 5223) {
                     console.log("未登录");
                     redirect("/");
                 }
                 return res[1].data;
             } else {
-                throw res[1].data;
+                throw res;
             }
         })
         .catch(parmas => {

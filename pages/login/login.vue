@@ -25,16 +25,49 @@
 		data() {
 			return {
 				formData: {
-					loginName: "",
-					phone: "",
-					passWord: "",
-					confirmPaw: ""
+					phone: "18142566233",
+					passWord: "123456"
 				},
 				pawIsShow:false,
 				confirmPawIsShow:false,
 			}
 		},
-		methods: {},
+		methods: {
+			regHandel(){
+				if (!/^(1)[2,3,4,5,6,7,8,9][0-9]{9}$/.test(this.formData.phone)) {
+					uni.showToast({
+						title: '手机号有误',
+						icon: "none"
+					});
+					return
+				}
+				if (this.formData.passWord === '' || this.formData.passWord.length < 5) {
+					uni.showToast({
+						title: '请输入5位以上的密码',
+						icon: "none"
+					});
+					return
+				}
+				uni.showLoading();
+				this.$http('POST', '/user-center/login', this.formData).then(res => {
+					uni.hideLoading();
+					if (res.code === 200) {
+						uni.showToast({
+							title: res.msg,
+							icon: "none"
+						});
+						uni.switchTab({
+						    url: '/pages/my/index'
+						});
+					} else {
+						uni.showToast({
+							title: res.msg,
+							icon: "none"
+						});
+					}
+				})
+			}
+		},
 	}
 </script>
 
