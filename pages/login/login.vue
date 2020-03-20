@@ -48,7 +48,9 @@
 					});
 					return
 				}
-				uni.showLoading();
+				uni.showLoading({
+					mask:true
+				});
 				this.$http('POST', '/user-center/login', this.formData).then(res => {
 					uni.hideLoading();
 					if (res.code === 200) {

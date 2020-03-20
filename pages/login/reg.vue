@@ -72,7 +72,9 @@
 					});
 					return
 				}
-				uni.showLoading();
+				uni.showLoading({
+					mask:true
+				});
 				this.$http('POST', '/user-center/register', this.formData).then(res => {
 					uni.hideLoading();
 					if (res.code === 200) {
