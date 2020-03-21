@@ -11,7 +11,7 @@
 	export default {
 		data() {
 			return {
-				title: '好友动态'
+				title: '朋友'
 			}
 		},
 		onLoad() {
@@ -23,7 +23,7 @@
 	}
 </script>
 
-<style>
+<style scoped lang="less">
 	.content {
 		display: flex;
 		flex-direction: column;

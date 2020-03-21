@@ -7,18 +7,18 @@
 			}
 		}, 
 		{
-			"path": "pages/friends/index",
+			"path": "pages/friends/friends",
 			"style": {
 				"navigationBarTitleText": "我的朋友"
 			}
 		},
 		{
-			"path": "pages/dynamics/index",
+			"path": "pages/dynamics/dynamics",
 			"style": {
 				"navigationBarTitleText": "好友动态"
 			}
 		},{
-			"path": "pages/my/index",
+			"path": "pages/my/my",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
@@ -48,17 +48,17 @@
 			"selectedIconPath": "static/image/tabbar/msg_hover.png",
 			"text": "聊天"
 		}, {
-			"pagePath": "pages/friends/index",
+			"pagePath": "pages/friends/friends",
 			"iconPath": "static/image/tabbar/friends.png",
 			"selectedIconPath": "static/image/tabbar/friends_hover.png",
 			"text": "好友"
 		}, {
-			"pagePath": "pages/dynamics/index",
+			"pagePath": "pages/dynamics/dynamics",
 			"iconPath": "static/image/tabbar/dynamics.png",
 			"selectedIconPath": "static/image/tabbar/dynamics_hover.png",
 			"text": "圈圈"
 		}, {
-			"pagePath": "pages/my/index",
+			"pagePath": "pages/my/my",
 			"iconPath": "static/image/tabbar/my.png",
 			"selectedIconPath": "static/image/tabbar/my_hover.png",
 			"text": "我的"

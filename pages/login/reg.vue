@@ -18,13 +18,14 @@
 		</view>
 		<button class="sumit_btn" style="width:100%;" @click="regHandel">立即注册</button>
 		<view class="regin">
-			<navigator class="reg-btn" url="/pages/login/login" hover-class="none">用户登录</navigator>
+			<navigator open-type="reLaunch" class="reg-btn" url="/pages/login/login" hover-class="none">用户登录</navigator>
 		</view>
 	</view>
 </template>
 
 <script>
-	import uniIcons from "@/components/uni-icons/uni-icons.vue"
+    import uniIcons from "@/components/uni-icons/uni-icons.vue"
+    import api from "@/api/index.js"
 	export default {
 		components: {
 			uniIcons
@@ -75,7 +76,7 @@
 				uni.showLoading({
 					mask:true
 				});
-				this.$http('POST', '/user-center/register', this.formData).then(res => {
+				this.$http('POST', api.userApi.register, this.formData).then(res => {
 					uni.hideLoading();
 					if (res.code === 200) {
 						uni.showToast({
@@ -83,7 +84,9 @@
 							icon: "none"
 						});
 						setTimeout(()=>{
-							uni.navigateBack(-1)
+							uni.reLaunch({
+							    url: '/pages/login/login'
+							});
 						},1500)
 					} else {
 						uni.showToast({
@@ -91,7 +94,9 @@
 							icon: "none"
 						});
 					}
-				})
+				}).catch(error => {
+                    uni.hideLoading();
+                })
 			}
 		}
 	}

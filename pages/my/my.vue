@@ -4,6 +4,7 @@
 		<view class="text-area">
 			<text class="title">{{title}}</text>
 		</view>
+		<button type="default" @click="signOut">退出登录</button>
 	</view>
 </template>
 
@@ -15,15 +16,22 @@
 			}
 		},
 		onLoad() {
-
+		
 		},
 		methods: {
-
+			signOut(){
+				uni.removeStorage({
+				    key: "userInfo"
+				});
+				uni.reLaunch({
+				    url: '/pages/login/login'
+				});
+			}
 		}
 	}
 </script>
 
-<style>
+<style scoped lang="less">
 	.content {
 		display: flex;
 		flex-direction: column;

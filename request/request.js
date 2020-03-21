@@ -1,6 +1,6 @@
 // import urlConfig from './config.js'
 const urlConfig = {
-    baseUrl: "http://172.20.10.9:3002"
+    baseUrl: "http://172.16.75.33:3002"
 };
 const request = {};
 const headers = {};
@@ -36,7 +36,14 @@ export default request.globalRequest = (method, url, data, domain, power) => {
             if (res[1] && res[1].statusCode == 200) {
                 if (res[1].data.code === 5223) {
                     console.log("未登录");
-                    redirect("/");
+                    uni.showToast({
+                        title: "请重新登录",
+                        icon: "none"
+                    });
+                    uni.removeStorage({
+                        key: "userInfo"
+                    });
+                    redirect("/pages/login/login");
                 }
                 return res[1].data;
             } else {

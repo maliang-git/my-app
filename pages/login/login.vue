@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<image class="user_head" src="../../static/logo.png" mode=""></image>
+		<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
 		<view class="input_box">
 			<uni-icons class="icon" type="phone" size="28" color="#555555"></uni-icons>
 			<input type="number" placeholder="请输入手机号" v-model="formData.phone" maxlength="11"></input>
@@ -11,13 +11,14 @@
 		</view>
 		<button class="sumit_btn" style="width:100%;" @click="regHandel">立即登录</button>
 		<view class="regin">
-			<navigator class="reg-btn" url="/pages/login/reg" hover-class="none">注册账号</navigator>
+			<navigator open-type="reLaunch" class="reg-btn" url="/pages/login/reg" hover-class="none">注册账号</navigator>
 		</view>
 	</view>
 </template>
 
 <script>
-	import uniIcons from "@/components/uni-icons/uni-icons.vue"
+    import uniIcons from "@/components/uni-icons/uni-icons.vue"
+    import api from "@/api/index.js"
 	export default {
 		components: {
 			uniIcons
@@ -51,15 +52,19 @@
 				uni.showLoading({
 					mask:true
 				});
-				this.$http('POST', '/user-center/login', this.formData).then(res => {
+				this.$http('POST', api.userApi.login, this.formData).then(res => {
 					uni.hideLoading();
 					if (res.code === 200) {
+                        uni.setStorage({
+                            key: 'userInfo',
+                            data: res.data
+                        });
 						uni.showToast({
 							title: res.msg,
 							icon: "none"
 						});
-						uni.switchTab({
-						    url: '/pages/my/index'
+						uni.reLaunch({
+						    url: '/pages/index/index'
 						});
 					} else {
 						uni.showToast({
@@ -67,7 +72,9 @@
 							icon: "none"
 						});
 					}
-				})
+				}).catch(error => {
+                    uni.hideLoading();
+                })
 			}
 		},
 	}
