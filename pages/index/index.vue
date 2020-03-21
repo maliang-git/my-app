@@ -6,6 +6,7 @@
                 class="scroll-view-item user-item"
                 v-for="(item, index) in 10"
                 :key="index"
+                @click="goChat"
             >
                 <view class="head-portrait">
                     <min-badge class="badge" :count="100"></min-badge>
@@ -56,7 +57,13 @@ export default {
             }
         });
     },
-    methods: {}
+    methods: {
+        goChat() {
+            uni.navigateTo({
+                url: "/chat/window/window"
+            });
+        }
+    }
 };
 </script>
 
