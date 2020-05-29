@@ -13,6 +13,15 @@ const headers = {};
 export default request.globalRequest = (method, url, data, domain, power) => {
     headers["Content-Type"] = "application/json;charset=UTF-8";
     headers["request-origin"] = "WAP";
+	
+	// 设置用户token
+	uni.getStorage({
+	    key: 'userInfo',
+	    success: function (res) {
+			headers["user-token"] = res.data.token;
+	    }
+	});
+	
     if (power && power.headers) {
         Object.keys(power.headers).forEach(key => {
             headers[key] = power.headers[key];
