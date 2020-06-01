@@ -72,9 +72,32 @@
 			};
 		},
 		onLoad() {
-			
+			this.sddfs()
 		},
 		methods: {
+			sddfs() {
+				// var wsServer = new WebSocket('ws://172.16.75.192:3002');
+				// var socketTask = uni.connectSocket({
+				// 	url: 'ws://172.16.75.192:3002', //仅为示例，并非真实接口地址。
+				// 	complete: ()=> {}
+				// });
+				uni.connectSocket({
+				    url: 'ws://172.16.75.192:3002',
+				    data() {
+				        return {
+				            x: '',
+				            y: ''
+				        };
+				    },
+				    header: {
+				        'content-type': 'application/json;charset=UTF-8',
+						'request-origin':'WAP',
+						'user-token':'132'
+				    },
+				    protocols: ['protocol1'],
+				    method: 'GET'
+				});
+			},
 			open() {
 				this.remarksName = this.userDetails.remarksName
 				this.labelName = this.userDetails.labelName
@@ -105,8 +128,8 @@
 					});
 			},
 			// 请求添加好有
-			friendsReq(){
-				
+			friendsReq() {
+
 			}
 		},
 	};
