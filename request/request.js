@@ -18,6 +18,7 @@ export default request.globalRequest = (method, url, data, domain, power) => {
 	uni.getStorage({
 	    key: 'userInfo',
 	    success: function (res) {
+			console.log(res)
 			headers["user-token"] = res.data.token;
 	    }
 	});
@@ -42,6 +43,7 @@ export default request.globalRequest = (method, url, data, domain, power) => {
             header: headers
         })
         .then(res => {
+			console.log(res)
             if (res[1] && res[1].statusCode == 200) {
                 if (res[1].data.code === 5223) {
                     console.log("未登录");
@@ -52,7 +54,9 @@ export default request.globalRequest = (method, url, data, domain, power) => {
                     uni.removeStorage({
                         key: "userInfo"
                     });
-                    redirect("/pages/login/login");
+					uni.navigateTo({
+					    url: "/pages/login/login",
+					});
                 }
                 return res[1].data;
             } else {

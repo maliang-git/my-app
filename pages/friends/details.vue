@@ -30,7 +30,7 @@
 		</view>
 		<view class="moudle-item moudle-btn">
 			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
-			<my-btn title="添加好友" icon-type="plus"></my-btn>
+			<my-btn title="添加好友" icon-type="plus" @click="friendsReq"></my-btn>
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
@@ -80,6 +80,7 @@
 				this.labelName = this.userDetails.labelName
 				this.$refs.popup.open()
 			},
+			// 設置备注与标签
 			setUserRemarksFn() {
 				this.$http("GET", '/user-center/setUserRemarks', {
 						remarksName: this.remarksName,
@@ -102,6 +103,10 @@
 					.catch(error => {
 						uni.hideLoading();
 					});
+			},
+			// 请求添加好有
+			friendsReq(){
+				
 			}
 		},
 	};
