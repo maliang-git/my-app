@@ -1,6 +1,6 @@
 // import urlConfig from './config.js'
 const urlConfig = {
-    baseUrl: "http://172.16.75.33:3002"
+    baseUrl: "http://172.16.75.192:3002"
 };
 const request = {};
 const headers = {};
