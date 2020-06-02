@@ -30,7 +30,7 @@
 		</view>
 		<view class="moudle-item moudle-btn">
 			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
-			<my-btn title="添加好友" icon-type="plus" @click="friendsReq"></my-btn>
+			<my-btn title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
@@ -69,34 +69,38 @@
 				userDetails: this.$store.state.searchUser,
 				remarksName: '',
 				labelName: '',
+				wsServer:null
 			};
 		},
 		onLoad() {
-			this.sddfs()
+			this.init()
 		},
 		methods: {
-			sddfs() {
-				// var wsServer = new WebSocket('ws://172.16.75.192:3002');
-				// var socketTask = uni.connectSocket({
-				// 	url: 'ws://172.16.75.192:3002', //仅为示例，并非真实接口地址。
-				// 	complete: ()=> {}
-				// });
-				uni.connectSocket({
-				    url: 'ws://172.16.75.192:3002',
-				    data() {
-				        return {
-				            x: '',
-				            y: ''
-				        };
-				    },
-				    header: {
-				        'content-type': 'application/json;charset=UTF-8',
-						'request-origin':'WAP',
-						'user-token':'132'
-				    },
-				    protocols: ['protocol1'],
-				    method: 'GET'
-				});
+			init() {
+				this.wsServer = new WebSocket('ws://172.16.75.192:1000');
+				this.wsServer.onopen = ()=>{
+					console.log('连接服务器成功!');
+				}
+				this.wsServer.onclose = ()=>{
+					console.log('服务器关闭');
+				}
+				this.wsServer.onerror = ()=>{
+					console.log("连接出错");
+				}
+				// 接收服务端消息
+				this.wsServer.onmessage = (e)=>{
+					console.log(e)
+				}
+			},
+			// 请求添加好有
+			friendsReq() {
+				let params = {
+					type:'1',
+					myToken:'123',
+					otherToken:'456',
+				}
+				params = JSON.stringify(params)
+				this.wsServer.send(params);
 			},
 			open() {
 				this.remarksName = this.userDetails.remarksName
@@ -127,10 +131,6 @@
 						uni.hideLoading();
 					});
 			},
-			// 请求添加好有
-			friendsReq() {
-
-			}
 		},
 	};
 </script>
