@@ -55,6 +55,7 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
 	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
+	import mixinsMoney from '../../mixins/webSocket.js'
 	export default {
 		components: {
 			uniIcons,
@@ -64,44 +65,18 @@
 			uniPopupMessage,
 			uniPopupDialog
 		},
+		mixins: [mixinsMoney],
 		data() {
 			return {
 				userDetails: this.$store.state.searchUser,
 				remarksName: '',
 				labelName: '',
-				wsServer:null
 			};
 		},
 		onLoad() {
-			this.init()
+			this.webSocketConnect()
 		},
 		methods: {
-			init() {
-				this.wsServer = new WebSocket('ws://172.16.75.192:1000');
-				this.wsServer.onopen = ()=>{
-					console.log('连接服务器成功!');
-				}
-				this.wsServer.onclose = ()=>{
-					console.log('服务器关闭');
-				}
-				this.wsServer.onerror = ()=>{
-					console.log("连接出错");
-				}
-				// 接收服务端消息
-				this.wsServer.onmessage = (e)=>{
-					console.log(e)
-				}
-			},
-			// 请求添加好有
-			friendsReq() {
-				let params = {
-					type:'1',
-					myToken:'123',
-					otherToken:'456',
-				}
-				params = JSON.stringify(params)
-				this.wsServer.send(params);
-			},
 			open() {
 				this.remarksName = this.userDetails.remarksName
 				this.labelName = this.userDetails.labelName

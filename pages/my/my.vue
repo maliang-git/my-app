@@ -12,20 +12,45 @@
 	export default {
 		data() {
 			return {
-				title: '我的'
+				title: '我的',
+				userInfo: {}
 			}
 		},
 		onLoad() {
-		
+			uni.getStorage({
+				key: 'userInfo',
+				success: (res) => {
+					this.userInfo = res.data
+				}
+			});
 		},
 		methods: {
-			signOut(){
-				uni.removeStorage({
-				    key: "userInfo"
-				});
-				uni.reLaunch({
-				    url: '/pages/login/login'
-				});
+			signOut() {
+				uni.showLoading();
+				// 退出登录
+				this.$http("POST", '/user-center/loginStateModify', {
+						userToken: this.userInfo.token,
+						status: 2 // 1: 上线  2：下线
+					})
+					.then(res => {
+						uni.hideLoading();
+						if (res.code === 200) {
+							uni.removeStorage({
+								key: "userInfo"
+							});
+							uni.reLaunch({
+								url: '/pages/login/login'
+							});
+						} else {
+							uni.showToast({
+								title: res.msg,
+								icon: "none"
+							});
+						}
+					})
+					.catch(error => {
+						uni.hideLoading();
+					});
 			}
 		}
 	}
