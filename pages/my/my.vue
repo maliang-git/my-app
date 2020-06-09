@@ -38,6 +38,7 @@
 							uni.removeStorage({
 								key: "userInfo"
 							});
+							this.$store.state.socketInfo = null
 							uni.reLaunch({
 								url: '/pages/login/login'
 							});

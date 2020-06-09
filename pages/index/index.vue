@@ -30,6 +30,7 @@
 
 <script>
 import minBadge from "@/components/min-badge/min-badge";
+
 export default {
     components: {
         minBadge

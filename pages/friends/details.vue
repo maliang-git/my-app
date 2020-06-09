@@ -55,7 +55,7 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
 	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
-	import mixinsMoney from '../../mixins/webSocket.js'
+	// import { io } from '../../socket.io.min.js'
 	export default {
 		components: {
 			uniIcons,
@@ -65,7 +65,6 @@
 			uniPopupMessage,
 			uniPopupDialog
 		},
-		mixins: [mixinsMoney],
 		data() {
 			return {
 				userDetails: this.$store.state.searchUser,
@@ -74,7 +73,7 @@
 			};
 		},
 		onLoad() {
-			this.webSocketConnect()
+			
 		},
 		methods: {
 			open() {
