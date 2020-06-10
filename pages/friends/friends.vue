@@ -50,6 +50,13 @@
 				],
 			};
 		},
+		watch:{
+			'$store.state.friendsReq'(val) {
+				this.$nextTick(()=>{
+					this.navList[0].friendsReq = val
+				})
+			},
+		},
 		onLoad() {
 
 		},
