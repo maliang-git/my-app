@@ -23,7 +23,7 @@
 		},
 		data() {
 			return {
-				keyData: '',
+				keyData: '18142566234',
 				isHaveUser: false
 			};
 		},

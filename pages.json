@@ -41,6 +41,12 @@
                 "navigationBarTitleText": "添加朋友"
             }
         },
+		{
+		    "path": "pages/friends/friendsReq",
+		    "style": {
+		        "navigationBarTitleText": "新的朋友"
+		    }
+		},
         {
             "path": "pages/friends/details",
             "style": {

@@ -95,6 +95,7 @@ export default {
                             key: "userInfo",
                             data: res.data
                         });
+						this.$store.commit('SET_USERINFO', res.data)
 						this.webSocketConnect()
                         uni.showToast({
                             title: res.msg,

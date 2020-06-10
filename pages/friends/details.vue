@@ -28,9 +28,18 @@
 			</fn-item>
 			<fn-item title="更多信息"></fn-item>
 		</view>
+		<view v-if="userDetails.reqMsg" class="moudle-item">
+			<view class="msg-info">
+				<text class="title">留言信息</text>
+				<text class="text">{{ userDetails.reqMsg }}</text>
+			</view>
+		</view>
 		<view class="moudle-item moudle-btn">
 			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
-			<my-btn title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<!-- seeType: 1或不存在:添加好友，2:同意添加好友 3:已经是好友 -->
+			<my-btn v-if="!userDetails.seeType" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<my-btn v-if="userDetails.seeType && userDetails.seeType === 2" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
+			<my-btn v-if="userDetails.seeType && userDetails.seeType === 3" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
@@ -55,7 +64,6 @@
 	import uniPopup from '@/components/uni-popup/uni-popup.vue'
 	import uniPopupMessage from '@/components/uni-popup/uni-popup-message.vue'
 	import uniPopupDialog from '@/components/uni-popup/uni-popup-dialog.vue'
-	// import { io } from '../../socket.io.min.js'
 	export default {
 		components: {
 			uniIcons,
@@ -73,7 +81,15 @@
 			};
 		},
 		onLoad() {
-			
+			// -- seeType: 1或不存在:添加好友，2:同意添加好友 3:已经是好友
+			if (this.userDetails.seeType !== 2) {
+				let friendsList = this.$store.state.myFriendList
+				for (let i = 0; i < friendsList.length; i++) {
+					if (friendsList[i].token === this.userDetails.token) {
+						this.userDetails.seeType = 3
+					}
+				}
+			}
 		},
 		methods: {
 			open() {
@@ -183,6 +199,22 @@
 					max-height: 100rpx;
 					margin-left: 10rpx;
 				}
+			}
+		}
+
+		.msg-info {
+			display: flex;
+			flex-direction: column;
+			padding: 20rpx 24rpx 20rpx 44rpx;
+
+			.title {
+				font-size: 34rpx;
+			}
+
+			.text {
+				font-size: 30rpx;
+				color: #888;
+				margin-top: 10rpx;
 			}
 		}
 

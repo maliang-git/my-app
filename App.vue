@@ -6,6 +6,7 @@
 		},
 		onShow: function() {
 			// var vConsole = new VConsole();
+			this.webSocketConnect()
 			console.log('App Show')
 		},
 		onHide: function() {
