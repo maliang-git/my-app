@@ -39,6 +39,8 @@
 								key: "userInfo"
 							});
 							this.$store.state.socketInfo = null
+							this.$store.commit('SET_FRIENDSLIST', []) // 我的好友列表
+							this.$store.commit('SET_FRIENDSREQ', [])  // 好友请求列表
 							uni.reLaunch({
 								url: '/pages/login/login'
 							});

@@ -8,7 +8,7 @@ export default {
 	methods: {
 		webSocketConnect() {
 			let { token }  = uni.getStorageSync('userInfo')
-			this.$store.state.socketInfo = io('ws://172.16.75.192:1000');
+			this.$store.state.socketInfo = io('ws://192.168.3.22:1000');
 			this.$store.state.socketInfo.on('connect', () => {
 				// ws连接已建立，此时可以进行socket.io的事件监听或者数据发送操作
 				console.log('ws 已连接');
