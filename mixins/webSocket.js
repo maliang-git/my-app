@@ -38,12 +38,12 @@ export default {
 			})
 			// 监听添加好友回调
 			this.$store.state.socketInfo.on('friends_add_req', (message) => {
-				console.log('监听添加好友请求回调',message)
+				console.log('好友请求',message)
 				this.$store.commit('SET_FRIENDSREQ', message)
 			})
 			// 监听添加好友成功回调
 			this.$store.state.socketInfo.on('friends_add_success', (message) => {
-				console.log(message)
+				console.log('好友列表', message)
 				this.$store.commit('SET_FRIENDSLIST', message)
 			})
 			// socket.on('error', (msg: any) => {
