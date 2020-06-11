@@ -36,10 +36,10 @@
 		</view>
 		<view class="moudle-item moudle-btn">
 			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
-			<!-- seeType: 1或不存在:添加好友，2:同意添加好友 3:已经是好友 -->
-			<my-btn v-if="!userDetails.seeType" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
-			<my-btn v-if="userDetails.seeType && userDetails.seeType === 2" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
-			<my-btn v-if="userDetails.seeType && userDetails.seeType === 3" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<!-- status: (1: 请求添加好友，2：已是好友 3：不是好友，也未请求添加) -->
+			<my-btn v-if="!userDetails.status" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<my-btn v-if="userDetails.status && userDetails.status === 1" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
+			<my-btn v-if="userDetails.status && userDetails.status === 2" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
@@ -81,15 +81,7 @@
 			};
 		},
 		onLoad() {
-			// -- seeType: 1或不存在:添加好友，2:同意添加好友 3:已经是好友
-			if (this.userDetails.seeType !== 2) {
-				let friendsList = this.$store.state.myFriendList
-				for (let i = 0; i < friendsList.length; i++) {
-					if (friendsList[i].token === this.userDetails.token) {
-						this.userDetails.seeType = 3
-					}
-				}
-			}
+
 		},
 		methods: {
 			open() {

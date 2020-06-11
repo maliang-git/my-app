@@ -40,6 +40,20 @@
 			searchUser() {
 				if (this.keyData && this.keyData != '' && !this.isHaveUser) {
 					uni.showLoading();
+					// 先从好友列表搜索
+					const frendsList = this.$store.state.myFriendList
+					if (frendsList.length > 0) {
+						for (let i = 0; i < frendsList.length; i++) {
+							if (frendsList[i].phone === this.keyData || frendsList[i].loginName === this.keyData) {
+								uni.hideLoading();
+								this.$store.commit('SEARCH_USER', frendsList[i])
+								this.pageJump()
+								return
+							}
+						}
+					}
+
+					// 好友列表未搜索到从远程搜索
 					this.$http("GET", api.userApi.searchUser, {
 							keyData: this.keyData
 						})

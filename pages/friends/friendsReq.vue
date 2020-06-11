@@ -9,18 +9,20 @@
 			</view>
 		</scroll-view>
 		<view class="add-list">
-			<view class="fn-item" v-for="(item, index) in $store.state.friendsReq" :key="index" @click="seeDetails(item)">
+			<view class="fn-item" v-for="(item, index) in friendsList" :key="index" @click="seeDetails(item)">
 				<view class="icon-box">
 					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
+					<text v-if="!item.isBrowse" class="red-icon"></text>
 				</view>
 				<view class="add-info">
 					<view class="req-people">
-						<text class="name">{{item.reqPeople.loginName}}</text>
+						<text class="name">{{item.loginName}}</text>
 						<text class="time">{{item.reqTime}}</text>
 					</view>
 					<text class="req-text">{{item.reqMsg}}</text>
 				</view>
-				<text class="req-btn">查看</text>
+				<text v-if="item.status === 1" class="req-btn">查看</text>
+				<text v-if="item.status === 2" class="add-btn">已添加</text>
 			</view>
 		</view>
 	</view>
@@ -35,7 +37,18 @@
 		},
 		data() {
 			return {
+				friendsList: this.$store.state.friendsReq
 			};
+		},
+		watch: {
+			'$store.state.friendsReq': {
+				handler: function(val, old) {
+					this.$nextTick(() => {
+						this.friendsList = val
+					})
+				},
+				deep: true,
+			},
 		},
 		onLoad() {},
 		methods: {
@@ -45,12 +58,11 @@
 				});
 			},
 			seeDetails(item) {
-				let data = {
-					reqMsg: item.reqMsg,
-					...item.reqPeople,
-					seeType: 2, // 1:添加好友，2:同意添加好友 3:已经是好友
+				// 若用户未查看过消息，更新查看状态
+				if(!item.isBrowse){
+					this.seeUserDeta(item)
 				}
-				this.$store.commit('SEARCH_USER', data)
+				this.$store.commit('SEARCH_USER', item)
 				uni.navigateTo({
 					url: "/pages/friends/details",
 				});
@@ -115,16 +127,18 @@
 				height: 70rpx;
 				margin-right: 20rpx;
 				border-radius: 10rpx;
-
+				.red-icon{
+					width: 16rpx;
+					height: 16rpx;
+					background-color: red;
+					position: absolute;
+					right: -5rpx;
+					top: -5rpx;
+					border-radius: 50%;
+				}
 				.user_head {
 					width: 100%;
 					height: 100%;
-				}
-
-				.badge {
-					position: absolute;
-					right: 0;
-					top: 0;
 				}
 			}
 
@@ -163,6 +177,13 @@
 				box-sizing: border-box;
 				border-radius: 10rpx;
 				background-color: #eee;
+			}
+
+			.add-btn {
+				font-size: 30rpx;
+				color: #1296db;
+				margin-right: 24rpx;
+				background: none;
 			}
 
 			&:not(:last-child) text {

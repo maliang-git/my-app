@@ -9,7 +9,7 @@
 			<view class="fn-item" v-for="(item, index) in navList" :key="index" @click="hangelFn(item.code)">
 				<view class="icon-box" :style="{ background: item.bgColor }">
 					<uni-icons :type="item.type" :color="item.color" size="26"></uni-icons>
-					<min-badge v-if="item.friendsReq" class="badge" :count="item.friendsReq.length"></min-badge>
+					<min-badge v-if="item.friendsReq" class="badge" :count="$store.state.unreadNum"></min-badge>
 				</view>
 				<text>{{ item.text }}</text>
 			</view>
@@ -50,15 +50,22 @@
 				],
 			};
 		},
-		watch:{
+		watch: {
 			'$store.state.friendsReq'(val) {
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.navList[0].friendsReq = val
 				})
 			},
 		},
 		onLoad() {
 
+		},
+		onShow() {
+			if (this.$store.state.unreadNum < 1) {
+				uni.hideTabBarRedDot({
+					index: 1
+				});
+			}
 		},
 		methods: {
 			hangelFn(code) {
