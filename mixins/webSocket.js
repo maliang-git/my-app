@@ -46,6 +46,11 @@ export default {
 				console.log('好友列表', message)
 				this.$store.commit('SET_FRIENDSLIST', message)
 			})
+			// 接收好友信息
+			this.$store.state.socketInfo.on('chat_info_rec', (message) => {
+				this.$store.commit('SET_CHAT_LIST', message)
+				console.log('聊天信息', message)
+			})
 			// socket.on('error', (msg: any) => {
 			//   console.log('ws error', msg);
 			// });

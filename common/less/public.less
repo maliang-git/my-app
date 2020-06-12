@@ -1,2 +1,12 @@
 /** 全局颜色 **/
 @themeColor: #1296db;
+
+//限制文本显示行数
+.textRow(@row) {
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: @row;
+    /*限制在一个块元素显示的文本的行数*/
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

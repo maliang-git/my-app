@@ -8,7 +8,9 @@ const store = new Vuex.Store({
 		socketInfo: null,
 		unreadNum: 0, // 未读请求数量
 		friendsReq: [], // 好友请求列表
-		myFriendList: [] // 我的好友列表
+		myFriendList: [], // 我的好友列表
+		chatInfoList: [], // 聊天列表
+		chatDetaile: [] // 聊天详情
 	},
 	mutations: {
 		SET_USERINFO(state, val) {
@@ -38,6 +40,12 @@ const store = new Vuex.Store({
 		},
 		SET_FRIENDSLIST(state, val) {
 			state.myFriendList = val
+		},
+		SET_CHAT_LIST(state, val) {
+			state.chatInfoList = val
+		},
+		SET_CHAT_DETAILE(state, val) {
+			state.chatDetaile = val
 		},
 	}
 })
