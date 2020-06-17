@@ -1,13 +1,15 @@
 <template>
 	<view class="content">
-		<scroll-view :scroll-top="0" scroll-y="true" class="scroll-Y">
-			<view v-for="(item,index) in chatDetaileList" :key="index" class="scroll-view-item user-item have-time" :class="item.type === 1 ? 'my-msg' : ''">
-				<text class="time">{{ item.createdAt }}</text>
-				<view class="head-portrait">
-					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
-				</view>
-				<view class="name-msg">
-					<text class="msg">{{ item.content }}</text>
+		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="scroll-Y" id="scrollview" style="height: 100%;">
+			<view id="msglistview">
+				<view v-for="(item,index) in chatDetaileList" :key="index" class="scroll-view-item user-item have-time" :class="item.type === 1 ? 'my-msg' : ''">
+					<text class="time">{{ item.createdAt }}</text>
+					<view class="head-portrait">
+						<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
+					</view>
+					<view class="name-msg">
+						<text class="msg">{{ item.content }}</text>
+					</view>
 				</view>
 			</view>
 			<!--    <view class="scroll-view-item user-item my-msg">
@@ -44,19 +46,19 @@
             </view> -->
 		</scroll-view>
 		<view class="input-content">
-			<text class="send-voice">
+			<view class="send-voice">
 				<uni-icons type="mic-filled" size="30"></uni-icons>
-			</text>
+			</view>
 			<view class="send-msg">
-				<input class="uni-input" v-model="messge" @confirm="sendMessge" />
+				<input class="uni-input" type="text" v-model="messge" @confirm="sendMessge" confirm-type="send"/>
 			</view>
 			<view class="other-btn">
-				<text>
+				<view>
 					<uni-icons type="contact-filled" size="30"></uni-icons>
-				</text>
-				<text>
+				</view>
+				<view>
 					<uni-icons type="plusempty" size="30"></uni-icons>
-				</text>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -71,6 +73,7 @@
 		data() {
 			return {
 				title: "window",
+				scrollTop: 0,
 				chatDetaileList: [],
 				currentChatUser: {},
 				messge: ''
@@ -84,6 +87,9 @@
 				deep: true,
 			},
 		},
+		mounted() {
+		    // this.scrollToBottom()
+		},
 		onLoad() {
 			// 当前聊天人
 			this.currentChatUser = uni.getStorageSync('currentChatUser')
@@ -93,11 +99,25 @@
 			this.getChatList(this.$store.state.chatInfoList)
 		},
 		methods: {
+			// 滚动至聊天底部
+			scrollToBottom(t) {
+				let that = this
+				let query = uni.createSelectorQuery()
+				query.select('#scrollview').boundingClientRect()
+				query.select('#msglistview').boundingClientRect()
+				query.exec((res) => {
+					if (res[1].height > res[0].height) {
+						that.scrollTop = res[1].height - res[0].height + 144
+						console.log(132,that.scrollTop)
+					}
+				})
+			},
 			getChatList(chatList) {
 				for (let i = 0; i < chatList.length; i++) {
 					if (chatList[i].userInfo.token === this.currentChatUser.token) {
 						this.$nextTick(() => {
 							this.chatDetaileList = chatList[i].msg
+							setTimeout(this.scrollToBottom,200)
 						})
 					}
 				}
@@ -116,7 +136,7 @@
 				this.$store.state.socketInfo.emit('send_messge', {
 					friendToken: this.currentChatUser.token,
 					myToken: token,
-					messge:this.messge
+					messge: this.messge
 				});
 				this.messge = ''
 				console.log(this.messge)

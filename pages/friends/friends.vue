@@ -13,7 +13,7 @@
 				</view>
 				<text>{{ item.text }}</text>
 			</view>
-			<view class="fn-item" v-for="(item, index) in $store.state.myFriendList" :key="item+index">
+			<view class="fn-item" v-for="(item, index) in $store.state.myFriendList" :key="item+index" @click="goChat(item)">
 				<view class="icon-box">
 					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
 				</view>
@@ -75,6 +75,18 @@
 					});
 				}
 			},
+			goChat(user) {
+				console.log(123,user)
+				// this.$store.commit('SET_CHAT_DETAILE', list)
+				// 存储当前聊天人
+				uni.setStorage({
+					key: "currentChatUser",
+					data: user
+				});
+				uni.navigateTo({
+					url: "/chat/window/window"
+				});
+			}
 		},
 	};
 </script>
