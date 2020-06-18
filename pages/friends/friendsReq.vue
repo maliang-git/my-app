@@ -17,7 +17,7 @@
 				<view class="add-info">
 					<view class="req-people">
 						<text class="name">{{item.loginName}}</text>
-						<text class="time">{{item.reqTime}}</text>
+						<text class="time">{{item.createTime}}</text>
 					</view>
 					<text class="req-text">{{item.reqMsg}}</text>
 				</view>

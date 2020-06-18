@@ -7,9 +7,7 @@ export default {
 	},
 	methods: {
 		webSocketConnect() {
-			let {
-				token
-			} = uni.getStorageSync('userInfo')
+			let userInfo = uni.getStorageSync('userInfo')
 			this.$store.state.socketInfo = io('ws://172.16.75.192:1000');
 			this.$store.state.socketInfo.on('connect', () => {
 				// ws连接已建立，此时可以进行socket.io的事件监听或者数据发送操作
@@ -24,7 +22,7 @@ export default {
 				});
 				// 校验登录
 				this.$store.state.socketInfo.emit('verify_login', {
-					userToken: token
+					user_id: userInfo._id
 				});
 
 			});
@@ -57,34 +55,35 @@ export default {
 		},
 		// 请求添加好友
 		friendsReq() {
-			const friendToken = this.$store.state.searchUser.token // 对方token
+			const user_one_id = this.$store.state.searchUser._id // 对方id
+			console.log(this.$store.state.searchUser)
 			const {
-				token
-			} = uni.getStorageSync('userInfo') // 我方token
-			if (!friendToken) {
+				_id:user_two_id
+			} = uni.getStorageSync('userInfo') // 我方id
+			if (!user_one_id) {
 				uni.showToast({
-					title: "缺少对方token",
+					title: "缺少对方id",
 					icon: "none"
 				});
 				return
 			}
 
-			if (!token) {
+			if (!user_two_id) {
 				uni.showToast({
-					title: "缺少我方token",
+					title: "缺少我方id",
 					icon: "none"
 				});
 				return
 			}
-			if (friendToken === token) {
+			if (user_one_id === user_two_id) {
 				uni.showToast({
 					title: "不能添加自己为好友",
 					icon: "none"
 				});
 			} else {
 				this.$store.state.socketInfo.emit('add_friends', {
-					friendToken,
-					myToken: token
+					user_one_id,
+					user_two_id
 				});
 			}
 		},
