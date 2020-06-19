@@ -36,10 +36,10 @@
 		</view>
 		<view class="moudle-item moudle-btn">
 			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
-			<!-- status: (1: 请求添加好友，2：已是好友 3：不是好友，也未请求添加) -->
-			<my-btn v-if="!userDetails.status" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
-			<my-btn v-if="userDetails.status && userDetails.status === 1" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
-			<my-btn v-if="userDetails.status && userDetails.status === 2" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<!-- isFriend: (0: 非好友，1：好友， 2：请求添加好友 ) -->
+			<my-btn v-if="!userDetails.isFriend" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<my-btn v-if="userDetails.isFriend && userDetails.isFriend === 2" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
+			<my-btn v-if="userDetails.isFriend && userDetails.isFriend === 1" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">

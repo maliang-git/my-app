@@ -13,11 +13,11 @@
 				</view>
 				<text>{{ item.text }}</text>
 			</view>
-			<view class="fn-item" v-for="(item, index) in $store.state.myFriendList" :key="item+index" @click="goChat(item)">
+			<view class="fn-item" v-for="(item, index) in $store.state.myFriendList" :key="item+index" @click="goChat(item.user_b)">
 				<view class="icon-box">
 					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
 				</view>
-				<text>{{ item.loginName }}</text>
+				<text>{{ item.user_b.loginName }}</text>
 			</view>
 		</scroll-view>
 	</view>

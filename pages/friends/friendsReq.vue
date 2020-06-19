@@ -16,8 +16,8 @@
 				</view>
 				<view class="add-info">
 					<view class="req-people">
-						<text class="name">{{item.loginName}}</text>
-						<text class="time">{{item.createTime}}</text>
+						<text class="name">{{item.user_b.loginName}}</text>
+						<text class="time">{{$time(new Date(item.createTime),"yyyy-MM-dd hh:mm:ss")}}</text>
 					</view>
 					<text class="req-text">{{item.reqMsg}}</text>
 				</view>
@@ -58,11 +58,13 @@
 				});
 			},
 			seeDetails(item) {
+				console.log(item)
 				// 若用户未查看过消息，更新查看状态
 				if(!item.isBrowse){
 					this.seeUserDeta(item)
 				}
-				this.$store.commit('SEARCH_USER', item)
+				item.user_b.isFriend = item.isFriend
+				this.$store.commit('SEARCH_USER', item.user_b)
 				uni.navigateTo({
 					url: "/pages/friends/details",
 				});
