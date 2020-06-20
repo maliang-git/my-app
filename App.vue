@@ -3,10 +3,10 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			this.webSocketConnect()
 		},
 		onShow: function() {
 			// var vConsole = new VConsole();
-			this.webSocketConnect()
 			console.log('App Show')
 		},
 		onHide: function() {

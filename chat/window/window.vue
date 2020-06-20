@@ -100,6 +100,7 @@ export default {
         };
     },
     mounted() {
+        const innerAudioContext = uni.createInnerAudioContext();
         this.getChatList()
         this.getRoomInfo()
         // 监听房间信息回调
@@ -119,6 +120,13 @@ export default {
             this.chatDetaileList.push(msgItem)
             if (msgItem.send_user._id === this.send_user._id) {
                 setTimeout(this.scrollToBottom)
+            }
+            if (msgItem.to_user._id === this.send_user._id) {
+                innerAudioContext.autoplay = true;
+                innerAudioContext.src = '../../static/mp3/tips.mp3';  // https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3
+                innerAudioContext.onPlay(() => {
+                    console.log('开始播放');
+                });
             }
         })
     },
