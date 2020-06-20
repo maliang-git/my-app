@@ -1,18 +1,18 @@
 <template>
 	<view class="content">
 		<scroll-view :scroll-top="0" scroll-y="true" class="scroll-Y">
-			<!-- <text class="tips">暂无聊天信息</text> -->
-			<view class="scroll-view-item user-item" v-for="(item, index) in chatList" :key="index" @click="goChat(item.userInfo)">
+			<text v-if="chatList.length < 1" class="tips">暂无聊天信息</text>
+			<view class="scroll-view-item user-item" v-for="(item, index) in chatList" :key="index" @click="goChat(item)">
 				<view class="head-portrait">
-					<min-badge class="badge" :count="noReadNum"></min-badge>
+					<min-badge class="badge" :count="item.unread_num"></min-badge>
 					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
 				</view>
 				<view class="name-msg">
 					<view class="name-time">
-						<text class="name">{{item.userInfo.loginName}}</text>
-						<text class="time">{{ item.msg[item.msg.length-1].createdAt }}</text>
+						<text class="name">{{item.origin_user.loginName}}</text>
+						<text class="time">{{ $time(new Date(item.updated_at),"yyyy-MM-dd hh:mm:ss") }}</text>
 					</view>
-					<text class="msg">{{ item.msg[item.msg.length-1].content }}</text>
+					<text class="msg">{{ item.lastMsg }}</text>
 				</view>
 			</view>
 		</scroll-view>
@@ -30,7 +30,7 @@
 			return {
 				title: "Hello",
 				chatList: this.$store.state.chatInfoList,
-				noReadNum: 0 // 未读数量
+				userInfo:{}
 			};
 		},
 		watch: {
@@ -38,41 +38,23 @@
 				handler: function(val, old) {
 					this.$nextTick(() => {
 						this.chatList = val
-						if (val.length > 0) {
-							val.forEach(item => {
-								this.noReadNum += 1
-							})
-						}
 					})
 				},
 				deep: true,
 			},
 		},
 		onLoad() {
-			// 未登录拦截
-			uni.getStorage({
-				key: "userInfo",
-				success: function(res) {
-					if (!res.data.token) {
-						uni.reLaunch({
-							url: "/pages/login/login"
-						});
-					}
-				},
-				fail: function() {
-					uni.reLaunch({
-						url: "/pages/login/login"
-					});
-				}
-			});
+			this.userInfo = uni.getStorageSync('userInfo')
+		},
+		mounted(){
+			
 		},
 		methods: {
-			goChat(user) {
-				// this.$store.commit('SET_CHAT_DETAILE', list)
+			goChat(room) {
 				// 存储当前聊天人
 				uni.setStorage({
 					key: "currentChatUser",
-					data: user
+					data: room.origin_user
 				});
 				uni.navigateTo({
 					url: "/chat/window/window"
