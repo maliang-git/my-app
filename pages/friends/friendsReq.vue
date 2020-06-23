@@ -53,6 +53,7 @@
 		onLoad() {},
 		methods: {
 			pageJump() {
+				uni.hideKeyboard()
 				uni.navigateTo({
 					url: "/pages/friends/search",
 				});

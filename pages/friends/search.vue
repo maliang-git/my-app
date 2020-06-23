@@ -42,11 +42,13 @@
 					uni.showLoading();
 					// 先从好友列表搜索
 					const frendsList = this.$store.state.myFriendList
+					console.log(123,frendsList)
 					if (frendsList.length > 0) {
 						for (let i = 0; i < frendsList.length; i++) {
-							if (frendsList[i].phone === this.keyData || frendsList[i].loginName === this.keyData) {
+							if (frendsList[i].user_b.phone === this.keyData || frendsList[i].user_b.loginName === this.keyData) {
 								uni.hideLoading();
-								this.$store.commit('SEARCH_USER', frendsList[i])
+								frendsList[i].user_b.isFriend = frendsList[i].isFriend
+								this.$store.commit('SEARCH_USER', frendsList[i].user_b)
 								this.pageJump()
 								return
 							}
@@ -79,6 +81,7 @@
 				}
 			},
 			pageJump() {
+				uni.hideKeyboard()
 				uni.navigateTo({
 					url: "/pages/friends/details",
 				});

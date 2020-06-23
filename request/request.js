@@ -15,13 +15,8 @@ export default request.globalRequest = (method, url, data, domain, power) => {
     headers["request-origin"] = "WAP";
 	
 	// 设置用户token
-	uni.getStorage({
-	    key: 'userInfo',
-	    success: function (res) {
-			console.log(res)
-			headers["user-token"] = res.data.token;
-	    }
-	});
+	let userInfo = uni.getStorageSync('userInfo')
+	headers["user-token"] = userInfo.token
 	
     if (power && power.headers) {
         Object.keys(power.headers).forEach(key => {

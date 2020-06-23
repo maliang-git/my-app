@@ -35,11 +35,11 @@
 			</view>
 		</view>
 		<view class="moudle-item moudle-btn">
-			<my-btn title="发送消息" icon-type="chatbubble"></my-btn>
+			<my-btn v-if="userDetails.isFriend && userDetails.isFriend === 1" title="发送消息" icon-type="chatbubble" @click.native="goChat(userDetails)"></my-btn>
 			<!-- isFriend: (0: 非好友，1：好友， 2：请求添加好友 ) -->
 			<my-btn v-if="!userDetails.isFriend" title="添加好友" icon-type="plus" @click.native="friendsReq"></my-btn>
 			<my-btn v-if="userDetails.isFriend && userDetails.isFriend === 2" title="同意添加为好友" icon-type="plus" @click.native="agreeToAdd"></my-btn>
-			<my-btn v-if="userDetails.isFriend && userDetails.isFriend === 1" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn>
+			<!-- <my-btn v-if="userDetails.isFriend && userDetails.isFriend === 1" title="删除好友" icon-type="plus" @click.native="friendsReq"></my-btn> -->
 		</view>
 		<uni-popup ref="popup" type="bottom">
 			<view class="popup-content">
@@ -81,13 +81,23 @@
 			};
 		},
 		onLoad() {
-
+			
 		},
 		methods: {
 			open() {
 				this.remarksName = this.userDetails.remarksName
 				this.labelName = this.userDetails.labelName
 				this.$refs.popup.open()
+			},
+			goChat(user) {
+			    // 存储当前聊天人
+			    uni.setStorage({
+			        key: "currentChatUser",
+			        data: user
+			    });
+			    uni.navigateTo({
+			        url: "/chat/window/window"
+			    });
 			},
 			// 設置备注与标签
 			setUserRemarksFn() {

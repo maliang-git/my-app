@@ -10,7 +10,7 @@
 				<view class="name-msg">
 					<view class="name-time">
 						<text class="name">{{item.origin_user.loginName}}</text>
-						<text class="time">{{ $time(new Date(item.updated_at),"yyyy-MM-dd hh:mm:ss") }}</text>
+						<text class="time">{{ $time(new Date(item.nweData),"yyyy-MM-dd hh:mm:ss") }}</text>
 					</view>
 					<text class="msg">{{ item.lastMsg }}</text>
 				</view>
@@ -37,6 +37,8 @@
 			'$store.state.chatInfoList': {
 				handler: function(val, old) {
 					this.$nextTick(() => {
+						console.log('val',val)
+						console.log('old',old)
 						this.chatList = val
 					})
 				},

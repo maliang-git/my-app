@@ -4,7 +4,8 @@
                      scroll-y="true"
                      class="scroll-Y"
                      id="scrollview"
-                     style="height: 100%;">
+                     style="height: 100%;"
+					 @touchstart="hideKeyboard()">
             <view id="msglistview">
                 <view v-for="(item,index) in chatDetaileList"
                       :key="index"
@@ -55,7 +56,7 @@
                 </view>
             </view> -->
         </scroll-view>
-        <view class="input-content">
+       <view class="input-content">
             <view class="send-voice">
                 <uni-icons type="mic-filled"
                            size="30"></uni-icons>
@@ -65,7 +66,7 @@
                        type="text"
                        v-model="messge"
                        @confirm="sendMessge"
-                       confirm-type="send" />
+                       confirm-type="text" />
             </view>
             <view class="other-btn">
                 <view>
@@ -92,49 +93,37 @@ export default {
         return {
             title: "window",
             scrollTop: 0,
-            chatDetaileList: [],
+            chatDetaileList: [], // 消息列表
             currentChatUser: {}, // 对方
             send_user: {}, // 我方
             messge: '',
-            roomInfo: {}
         };
     },
+	watch: {
+	    '$store.state.chatDetaileList'(val) {
+	        this.$nextTick(() => {
+	            this.chatDetaileList = val
+				setTimeout(this.scrollToBottom,100)
+	        })
+	    },
+	},
     mounted() {
-        const innerAudioContext = uni.createInnerAudioContext();
         this.getChatList()
         this.getRoomInfo()
-        // 监听房间信息回调
-        this.$store.state.socketInfo.on('return_room_info', (roomInfo) => {
-            this.roomInfo = roomInfo
-            console.log('房间信息', roomInfo)
-        })
-        // 监听获取消息列表
-        this.$store.state.socketInfo.on('return_msg_list', (msgList) => {
-            console.log('消息列表', msgList)
-            this.chatDetaileList = msgList
-            setTimeout(this.scrollToBottom)
-        })
-        // 监听接收消息回调
-        this.$store.state.socketInfo.on('receive_msg', (msgItem) => {
-            console.log('接收消息', msgItem)
-            this.chatDetaileList.push(msgItem)
-            if (msgItem.send_user._id === this.send_user._id) {
-                setTimeout(this.scrollToBottom)
-            }
-            if (msgItem.to_user._id === this.send_user._id) {
-                innerAudioContext.autoplay = true;
-                innerAudioContext.src = '../../static/mp3/tips.mp3';  // https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3
-                innerAudioContext.onPlay(() => {
-                    console.log('开始播放');
-                });
-            }
-        })
     },
     onLoad() {
         this.send_user = uni.getStorageSync('userInfo')
         this.currentChatUser = uni.getStorageSync('currentChatUser')
+		uni.setNavigationBarTitle({
+		    title: this.currentChatUser.loginName
+		});
+		this.scrollToBottom()
     },
     methods: {
+		// 隐藏软键盘
+		hideKeyboard(){
+			uni.hideKeyboard()
+		},
         // 获取当前房间信息
         getRoomInfo() {
             this.$store.state.socketInfo.emit('get_room_info', {
@@ -149,6 +138,7 @@ export default {
             query.select('#scrollview').boundingClientRect()
             query.select('#msglistview').boundingClientRect()
             query.exec((res) => {
+				console.log(123,res)
                 if (res[1].height > res[0].height) {
                     that.scrollTop = res[1].height - res[0].height + 144
                 }
@@ -163,6 +153,9 @@ export default {
         },
         // 发送消息
         sendMessge() {
+			if(!this.messge){
+				return
+			}
             this.$store.state.socketInfo.emit('send_messge', {
                 to_user: this.currentChatUser._id,
                 send_user: this.send_user._id,
@@ -174,7 +167,7 @@ export default {
     destroyed() {
         this.$store.state.socketInfo.emit('update_room_msg_read', {
             userId: this.send_user._id,
-            roomId: this.roomInfo._id,
+            roomId: this.$store.state.roomInfo._id,
         });
     }
 };
@@ -186,14 +179,14 @@ export default {
 .content {
     position: relative;
     width: 100%;
-    height: calc(100vh - 44px);
+    height: calc(100vh);
     background-color: #eeeeee;
-
+	
     .scroll-Y {
-        height: 100%;
-        padding-bottom: 110rpx;
+        height: calc(100vh);
+        // padding-bottom: 110rpx;
         box-sizing: border-box;
-
+		padding-bottom: 110rpx;
         .have-time {
             position: relative;
             margin-top: 80rpx;

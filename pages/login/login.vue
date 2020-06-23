@@ -96,14 +96,16 @@ export default {
                             data: res.data
                         });
 						this.$store.commit('SET_USERINFO', res.data)
-						this.webSocketConnect()
-                        uni.showToast({
-                            title: res.msg,
-                            icon: "none"
-                        });
-                        uni.reLaunch({
-                            url: "/pages/index/index"
-                        });
+						uni.showToast({
+						    title: res.msg,
+						    icon: "none"
+						});
+						setTimeout(()=>{
+							this.webSocketConnect()
+							uni.reLaunch({
+							    url: "/pages/index/index"
+							});
+						})
                     } else {
                         uni.showToast({
                             title: res.msg,

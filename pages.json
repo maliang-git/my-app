@@ -95,7 +95,10 @@
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "my-app",
         "navigationBarBackgroundColor": "#F8F8F8",
-        "backgroundColor": "#F8F8F8"
-    }
+        "backgroundColor": "#eeeeee"
+    },
+	"app-plus": {
+	    "softinputMode": "adjustResize"
+	}
 }
 /** 1296db */

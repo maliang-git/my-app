@@ -10,6 +10,8 @@ const store = new Vuex.Store({
         friendsReq: [], // 好友请求列表
         myFriendList: [], // 我的好友列表
         chatInfoList: [], // 聊天列表
+		roomInfo:{}, // 房间信息
+		chatDetaileList:[], // 消息列表
     },
     mutations: {
         SET_USERINFO(state, val) {
@@ -42,7 +44,28 @@ const store = new Vuex.Store({
         },
         SET_CHAT_LIST(state, val) {
             state.chatInfoList = val;
+			// 新消息提示
+			const innerAudioContext = uni.createInnerAudioContext();
+			val.forEach(item=>{
+				if(item.unread_num > 0){
+					innerAudioContext.autoplay = true;
+					innerAudioContext.src = '../../static/mp3/tips.mp3';  // https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3
+					innerAudioContext.onPlay(() => {
+					    console.log('开始播放');
+					});
+				}
+			})
         },
+		SET_ROOMINFO(state, val) {
+		    state.roomInfo = val;
+		},
+		SET_MSGLIST(state, val) {
+			if(val.type === 'add'){
+				state.chatDetaileList.push(val.item)
+				return
+			}
+		    state.chatDetaileList = val;
+		},
     },
 });
 export default store;

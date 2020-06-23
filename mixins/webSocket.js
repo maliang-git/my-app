@@ -21,6 +21,7 @@ export default {
                         this.clearData();
                     }
                 });
+				console.log(userInfo)
                 // 校验登录
                 this.$store.state.socketInfo.emit("verify_login", {
                     user_id: userInfo._id,
@@ -52,6 +53,22 @@ export default {
                 console.log("房间列表", roomList);
                 this.$store.commit("SET_CHAT_LIST", roomList);
             });
+			// 监听获取房间信息回调
+			this.$store.state.socketInfo.on('return_room_info', (roomInfo) => {
+				this.$store.commit("SET_ROOMINFO", roomInfo);
+			    console.log('房间信息', roomInfo)
+			});
+			// 监听获取消息列表
+			this.$store.state.socketInfo.on('return_msg_list', (msgList) => {
+			    console.log('消息列表', msgList)
+				this.$store.commit("SET_MSGLIST", msgList);
+			})
+			// 监听接收消息回调
+			this.$store.state.socketInfo.on('receive_msg', (msgItem) => {
+			    console.log('接收消息', msgItem)
+				this.$store.commit("SET_MSGLIST", {type:'add',item:msgItem});
+			    // setTimeout(this.scrollToBottom,300)
+			})
             // socket.on('error', (msg: any) => {
             //   console.log('ws error', msg);
             // });
@@ -129,12 +146,14 @@ export default {
             uni.removeStorage({
                 key: "currentChatUser",
             });
-            this.$store.state.socketInfo = null;
+            this.$store.state.socketInfo.close()
             this.$store.commit("SET_USERINFO", {});
             this.$store.commit("SEARCH_USER", {});
             this.$store.commit("SET_FRIENDSREQ", []);
             this.$store.commit("SET_FRIENDSLIST", []);
             this.$store.commit("SET_CHAT_LIST", []);
+			this.$store.commit("SET_ROOMINFO", {});
+			this.$store.commit("SET_MSGLIST", []);
             uni.reLaunch({
                 url: "/pages/login/login",
             });
