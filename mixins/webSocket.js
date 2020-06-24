@@ -61,7 +61,8 @@ export default {
 			// 监听获取消息列表
 			this.$store.state.socketInfo.on('return_msg_list', (msgList) => {
 			    console.log('消息列表', msgList)
-				this.$store.commit("SET_MSGLIST", msgList);
+				this.$store.commit("SET_MSGLIST", msgList.data);
+				this.$store.commit("SET_MSGTOTAL", msgList.total);
 			})
 			// 监听接收消息回调
 			this.$store.state.socketInfo.on('receive_msg', (msgItem) => {

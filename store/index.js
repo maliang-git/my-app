@@ -12,6 +12,8 @@ const store = new Vuex.Store({
         chatInfoList: [], // 聊天列表
 		roomInfo:{}, // 房间信息
 		chatDetaileList:[], // 消息列表
+		msgTotal:0, // 消息总数
+		isLoading:'' // 是否正在加载
     },
     mutations: {
         SET_USERINFO(state, val) {
@@ -64,7 +66,13 @@ const store = new Vuex.Store({
 				state.chatDetaileList.push(val.item)
 				return
 			}
-		    state.chatDetaileList = val;
+		    state.chatDetaileList = val.concat(state.chatDetaileList);
+		},
+		SET_MSGTOTAL(state, val) {
+		    state.msgTotal = val;
+		},
+		SET_LOADING(state, val) {
+		    state.isLoading = val;
 		},
     },
 });
