@@ -1,0 +1,207 @@
+<template>
+	<div class="page-content">
+		<list @click="hideKeyboard">
+			<!-- 注意事项: 不能使用 index 作为 key 的唯一标识 -->
+			<cell v-for="(item, index) in dataList" :key="item._id">
+				<div class="user-item" v-if="item.send_user._id ===  currentChatUser._id || item.is_send">
+					<text class="time">{{ item.create_time }}</text>
+					<div class="msg-item">
+						<div class="head-portrait">
+							<image class="user-head" src="../../static/defullt_img.png" mode=""></image>
+						</div>
+						<div class="msg-content">
+							<text class="msg"><text class="icon-sanjiao"></text>{{ item.content }}</text>
+						</div>
+					</div>
+				</div>
+			</cell>
+		</list>
+		<div class="input-content">
+			<div class="send-voice">
+				<uni-icons type="mic-filled" size="30"></uni-icons>
+			</div>
+			<div class="send-msg">
+				<input class="uni-input" type="text" v-model="messge" @confirm="sendMessge" confirm-type="send" />
+			</div>
+			<div class="other-btn">
+				<div>
+					<uni-icons type="contact-filled" size="30"></uni-icons>
+				</div>
+				<div>
+					<uni-icons type="plusempty" size="30"></uni-icons>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<script>
+	export default {
+		data() {
+			return {
+				send_user: {},
+				currentChatUser: {},
+				dataList: [{
+					msg_type: 1,
+					status: 0,
+					is_send: 1,
+					_id: "5ef1d68b718b4542dcdfbb60",
+					content: "阿范德萨阿范德萨发",
+					send_user: {
+						_id: "5ef1bcb206c89f4d60e532ab",
+						token: "159290078684351FBB1784389C176F202D159F8BF0DDE",
+						loginName: "小马4号",
+						phone: "18142566234",
+						userName: "",
+						headImg: "",
+						city: "",
+						cityCode: "",
+						createTime: "2020-06-23T08:26:26.844Z"
+					},
+					to_user: {
+						_id: "5ef1bc9c06c89f4d60e532aa",
+						token: "1592900764792F402C57DD0AE6BE967BDA063A8116DC4",
+						loginName: "测试",
+						phone: "18142566233",
+						userName: "",
+						headImg: "",
+						city: "",
+						cityCode: "",
+						createTime: "2020-06-23T08:26:04.793Z"
+					},
+					create_time: "2020-06-23T10:16:43.886Z",
+				}, {
+					msg_type: 1,
+					status: 0,
+					is_send: 1,
+					_id: "5ef1d68f718b4542dcdfbb62",
+					content: "阿撒打发第三方阿打算放阿撒打发第三方阿打算放阿撒打发第三方阿打算放阿撒打发第三方阿打算放",
+					send_user: {
+						_id: "5ef1bc9c06c89f4d60e532aa",
+						token: "1592900764792F402C57DD0AE6BE967BDA063A8116DC4",
+						loginName: "测试",
+						phone: "18142566233",
+						userName: "",
+						headImg: "",
+						city: "",
+						cityCode: "",
+						createTime: "2020-06-23T08:26:04.793Z"
+					},
+					to_user: {
+						_id: "5ef1bcb206c89f4d60e532ab",
+						token: "159290078684351FBB1784389C176F202D159F8BF0DDE",
+						loginName: "小马4号",
+						phone: "18142566234",
+						userName: "",
+						headImg: "",
+						city: "",
+						cityCode: "",
+						createTime: "2020-06-23T08:26:26.844Z"
+
+					},
+					create_time: "2020-06-23T10:16:47.230Z"
+				}]
+			}
+		},
+		onLoad() {
+			this.send_user = uni.getStorageSync('userInfo')
+			this.currentChatUser = uni.getStorageSync('currentChatUser')
+			uni.setNavigationBarTitle({
+				title: this.currentChatUser.loginName
+			});
+		},
+		methods: {
+			// 隐藏软键盘
+			hideKeyboard() {
+				uni.hideKeyboard()
+			},
+		}
+	}
+</script>
+<style scoped>
+	.page-content {
+		flex: 1;
+		background-color: #eeeeee;
+	}
+
+	.user-item {
+		display: flex;
+		flex-direction: column;
+		padding: 20wx 15wx 0 15wx;
+		box-sizing:border-box;
+	}
+
+	.time {
+		font-size: 30rpx;
+		color: #999999;
+		text-align: center;
+	}
+
+	.msg-item {
+		margin-top: 8wx;
+	}
+	
+	.head-portrait {
+		width: 50wx;
+		height: 50wx;
+		background-color: #eeeeee;
+		border-radius: 6rpx;
+		margin-right: 14wx;
+	}
+
+	.user-head {
+		flex: 1;
+	}
+
+	.msg-content {
+		width: 100wx;
+		display: flex;
+		flex-direction: column;
+		background-color: #fff;
+		font-size: 32rpx;
+	}
+	.msg{
+		width: 100wx;
+		display: flex;
+		flex-direction: column;
+	}
+/* 	.icon-sanjiao{
+		width: 10wx;
+		height: 10wx;
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+		background-color: #fff;
+		position: absolute;
+		left: -5wx;
+		top: 10wx;
+	} */
+
+	.input-content {
+		flex: 0.1;
+		height: 50wx;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 16rpx;
+		box-sizing: border-box;
+		background-color: pink;
+		background-color: #eeeeee;
+		box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
+	}
+
+	.send-msg {
+		flex: 1;
+		height: 80rpx;
+		margin: 0 20rpx;
+	}
+
+	.uni-input {
+		flex: 1;
+		background-color: #fff;
+	}
+
+	.other-btn {
+		display: flex;
+		flex-direction: row;
+	}
+</style>
