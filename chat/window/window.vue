@@ -165,7 +165,7 @@ export default {
 		},
         // 获取当前房间信息
         getRoomInfo() {
-            this.$store.state.socketInfo.emit('get_room_info', {
+            getApp().globalData.socketInfo.emit('get_room_info', {
                 to_user: this.currentChatUser._id,
                 send_user: this.send_user._id,
             });
@@ -189,14 +189,14 @@ export default {
         getChatList() {
 			this.searchCriteria.send_user = this.send_user._id
 			this.searchCriteria.to_user = this.currentChatUser._id
-            this.$store.state.socketInfo.emit('get_msg_list',this.searchCriteria);
+            getApp().globalData.socketInfo.emit('get_msg_list',this.searchCriteria);
         },
         // 发送消息
         sendMessge() {
 			if(!this.messge){
 				return
 			}
-            this.$store.state.socketInfo.emit('send_messge', {
+            getApp().globalData.socketInfo.emit('send_messge', {
                 to_user: this.currentChatUser._id,
                 send_user: this.send_user._id,
                 messge: this.messge
@@ -205,7 +205,7 @@ export default {
         }
     },
     destroyed() {
-        this.$store.state.socketInfo.emit('update_room_msg_read', {
+        getApp().globalData.socketInfo.emit('update_room_msg_read', {
             userId: this.send_user._id,
             roomId: this.$store.state.roomInfo._id,
         });

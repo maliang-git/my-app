@@ -1,16 +1,18 @@
 <template>
 	<div class="page-content">
-		<list @click="hideKeyboard">
+		<list @touchstart="hideKeyboard">
 			<!-- 注意事项: 不能使用 index 作为 key 的唯一标识 -->
-			<cell v-for="(item, index) in dataList" :key="item._id">
+			<cell v-for="(item, index) in dataList" :key="item._id" :ref="'cell'+index">
 				<div class="user-item" v-if="item.send_user._id ===  currentChatUser._id || item.is_send">
-					<text class="time">{{ item.create_time }}</text>
-					<div class="msg-item">
-						<div class="head-portrait">
+					<text class="time">{{ timeRest(new Date(item.create_time),"yyyy-MM-dd hh:mm:ss") }}</text>
+					<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-item' : 'my-msg-item'">
+						<div :class="item.send_user._id ===  currentChatUser._id ? 'head-portrait' : 'my-head'">
 							<image class="user-head" src="../../static/defullt_img.png" mode=""></image>
 						</div>
-						<div class="msg-content">
-							<text class="msg"><text class="icon-sanjiao"></text>{{ item.content }}</text>
+						<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-content' : 'my-msg-content'">
+							<text class="msg" :class="item.send_user._id ===  currentChatUser._id ? '' : 'my-msg'">
+								<div :class="item.send_user._id ===  currentChatUser._id ? 'triangle' : 'my-triangle'"></div>{{ item.content }}
+							</text>
 						</div>
 					</div>
 				</div>
@@ -35,71 +37,23 @@
 	</div>
 </template>
 <script>
+	import timeFormat from '../../utils/date.js'
+	 const dom = weex.requireModule('dom')
 	export default {
 		data() {
 			return {
+				timeRest: timeFormat,
 				send_user: {},
 				currentChatUser: {},
-				dataList: [{
-					msg_type: 1,
-					status: 0,
-					is_send: 1,
-					_id: "5ef1d68b718b4542dcdfbb60",
-					content: "阿范德萨阿范德萨发",
-					send_user: {
-						_id: "5ef1bcb206c89f4d60e532ab",
-						token: "159290078684351FBB1784389C176F202D159F8BF0DDE",
-						loginName: "小马4号",
-						phone: "18142566234",
-						userName: "",
-						headImg: "",
-						city: "",
-						cityCode: "",
-						createTime: "2020-06-23T08:26:26.844Z"
-					},
-					to_user: {
-						_id: "5ef1bc9c06c89f4d60e532aa",
-						token: "1592900764792F402C57DD0AE6BE967BDA063A8116DC4",
-						loginName: "测试",
-						phone: "18142566233",
-						userName: "",
-						headImg: "",
-						city: "",
-						cityCode: "",
-						createTime: "2020-06-23T08:26:04.793Z"
-					},
-					create_time: "2020-06-23T10:16:43.886Z",
-				}, {
-					msg_type: 1,
-					status: 0,
-					is_send: 1,
-					_id: "5ef1d68f718b4542dcdfbb62",
-					content: "阿撒打发第三方阿打算放阿撒打发第三方阿打算放阿撒打发第三方阿打算放阿撒打发第三方阿打算放",
-					send_user: {
-						_id: "5ef1bc9c06c89f4d60e532aa",
-						token: "1592900764792F402C57DD0AE6BE967BDA063A8116DC4",
-						loginName: "测试",
-						phone: "18142566233",
-						userName: "",
-						headImg: "",
-						city: "",
-						cityCode: "",
-						createTime: "2020-06-23T08:26:04.793Z"
-					},
-					to_user: {
-						_id: "5ef1bcb206c89f4d60e532ab",
-						token: "159290078684351FBB1784389C176F202D159F8BF0DDE",
-						loginName: "小马4号",
-						phone: "18142566234",
-						userName: "",
-						headImg: "",
-						city: "",
-						cityCode: "",
-						createTime: "2020-06-23T08:26:26.844Z"
-
-					},
-					create_time: "2020-06-23T10:16:47.230Z"
-				}]
+				messge: "",
+				searchCriteria: {
+					page: 1,
+					limit: 15,
+					send_user: '',
+					to_user: '',
+				},
+				dataList: [],
+				timer:null,
 			}
 		},
 		onLoad() {
@@ -109,11 +63,57 @@
 				title: this.currentChatUser.loginName
 			});
 		},
+		onReady() {
+			this.getChatList()
+			uni.$on('receive_msg_list', (data) => {
+				this.dataList = data
+				this.timer = setTimeout(()=>{
+					this.scrollElement(data.length-1)
+				})
+			})
+		},
 		methods: {
 			// 隐藏软键盘
 			hideKeyboard() {
 				uni.hideKeyboard()
 			},
+			// 获取消息列表
+			getChatList() {
+				this.searchCriteria.send_user = this.send_user._id
+				this.searchCriteria.to_user = this.currentChatUser._id
+				getApp().globalData.socketInfo.emit('get_msg_list', this.searchCriteria);
+			},
+			// 发送消息
+			sendMessge() {
+				if (!this.messge) {
+					return
+				}
+				getApp().globalData.socketInfo.emit('send_messge', {
+					to_user: this.currentChatUser._id,
+					send_user: this.send_user._id,
+					messge: this.messge
+				});
+				this.messge = ''
+			},
+			// toTop(params, e) {
+			// 	//nvue下阻止事件冒泡的方法
+			// 	e.stopPropagation()
+			// 	this.scrollElement(0);
+			// },
+			//滚动到某一个元素
+			scrollElement(index) {
+				clearTimeout(this.timer)
+				if (this.$refs['cell' + index]) {
+					//滑动到顶部
+					let el = this.$refs['cell' + index][0];
+					dom && dom.scrollToElement(el, {
+						animated:false //滚动的动画，默认有
+					});
+				}
+			},
+		},
+		destroyed() {
+			uni.$emit('clear_msg_list');
 		}
 	}
 </script>
@@ -124,10 +124,8 @@
 	}
 
 	.user-item {
-		display: flex;
 		flex-direction: column;
 		padding: 20wx 15wx 0 15wx;
-		box-sizing:border-box;
 	}
 
 	.time {
@@ -139,13 +137,23 @@
 	.msg-item {
 		margin-top: 8wx;
 	}
-	
+
+	.my-msg-item {
+		flex-wrap: wrap-reverse;
+		margin-top: 8wx;
+	}
+
 	.head-portrait {
 		width: 50wx;
 		height: 50wx;
-		background-color: #eeeeee;
 		border-radius: 6rpx;
 		margin-right: 14wx;
+	}
+
+	.my-head {
+		width: 50wx;
+		height: 50wx;
+		border-radius: 6rpx;
 	}
 
 	.user-head {
@@ -153,37 +161,62 @@
 	}
 
 	.msg-content {
-		width: 100wx;
-		display: flex;
-		flex-direction: column;
+		position: relative;
+		margin-left: 70wx;
+		margin-top: -50wx;
+		padding-right: 50wx;
+	}
+
+	.my-msg-content {
+		position: relative;
+		margin-right: 70wx;
+		margin-top: -50wx;
+		padding-left: 50wx;
+	}
+
+	.msg {
+		position: relative;
+		font-size: 14wx;
+		line-height: 20wx;
 		background-color: #fff;
-		font-size: 32rpx;
+		align-self: flex-start;
+		padding: 14wx 8wx;
+		border-radius: 4wx;
 	}
-	.msg{
-		width: 100wx;
-		display: flex;
-		flex-direction: column;
+
+	.my-msg {
+		background-color: #1296DB;
+		align-self: flex-end;
 	}
-/* 	.icon-sanjiao{
+
+	.triangle {
 		width: 10wx;
 		height: 10wx;
-		-webkit-transform: rotate(-45deg);
 		transform: rotate(-45deg);
 		background-color: #fff;
 		position: absolute;
 		left: -5wx;
-		top: 10wx;
-	} */
+		top: 20wx;
+	}
+
+	.my-triangle {
+		width: 10wx;
+		height: 10wx;
+		transform: rotate(-45deg);
+		background-color: #fff;
+		position: absolute;
+		top: 20wx;
+		right: -5wx !important;
+		background-color: #1296DB;
+	}
 
 	.input-content {
 		flex: 0.1;
 		height: 50wx;
-		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
 		padding: 0 16rpx;
-		box-sizing: border-box;
 		background-color: pink;
 		background-color: #eeeeee;
 		box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);
@@ -201,7 +234,6 @@
 	}
 
 	.other-btn {
-		display: flex;
 		flex-direction: row;
 	}
 </style>

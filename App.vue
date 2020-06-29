@@ -1,6 +1,9 @@
 <script>
 	// import VConsole from './static/js/vconsole.min.js'
 	export default {
+		globalData: {
+			socketInfo: null
+		},
 		onLaunch: function() {
 			console.log('App Launch')
 			this.webSocketConnect()

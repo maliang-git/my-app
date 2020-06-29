@@ -67,6 +67,10 @@ const store = new Vuex.Store({
 				return
 			}
 		    state.chatDetaileList = val.concat(state.chatDetaileList);
+			uni.$emit('receive_msg_list', state.chatDetaileList);
+			uni.$on('clear_msg_list', (data) => {
+				state.chatDetaileList = []
+			})
 		},
 		SET_MSGTOTAL(state, val) {
 		    state.msgTotal = val;
