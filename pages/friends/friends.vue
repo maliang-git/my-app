@@ -31,7 +31,7 @@
                   @click="goChat(item.user_b)">
                 <view class="icon-box">
                     <image class="user_head"
-                           src="../../static/defullt_img.png"
+                           src="../../static/defullt_head.jpg"
                            mode=""></image>
                 </view>
                 <text>{{ item.user_b.loginName }}</text>

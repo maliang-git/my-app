@@ -1,49 +1,38 @@
 <template>
     <view class="container">
-        <image
-            class="user_head"
-            src="../../static/defullt_img.png"
-            mode=""
-        ></image>
+        <image class="user_head"
+               src="../../static/defullt_head.jpg"
+               mode=""></image>
         <view class="input_box">
-            <uni-icons
-                class="icon"
-                type="phone"
-                size="28"
-                color="#555555"
-            ></uni-icons>
-            <input
-                type="number"
-                placeholder="请输入手机号"
-                v-model="formData.phone"
-                maxlength="11"
-            />
+            <uni-icons class="icon"
+                       type="phone"
+                       size="28"
+                       color="#555555"></uni-icons>
+            <input type="number"
+                   placeholder="请输入手机号"
+                   v-model="formData.phone"
+                   maxlength="11" />
         </view>
         <view class="input_box">
-            <uni-icons
-                class="icon"
-                type="locked"
-                size="28"
-                color="#555555"
-            ></uni-icons>
-            <input
-                placeholder="请输入密码"
-                v-model="formData.passWord"
-                :password="pawIsShow"
-                maxlength="20"
-            />
+            <uni-icons class="icon"
+                       type="locked"
+                       size="28"
+                       color="#555555"></uni-icons>
+            <input placeholder="请输入密码"
+                   v-model="formData.passWord"
+                   :password="pawIsShow"
+                   maxlength="20" />
         </view>
-        <button class="sumit_btn" style="width:100%;" @click="regHandel">
+        <button class="sumit_btn"
+                style="width:100%;"
+                @click="regHandel">
             立即登录
         </button>
         <view class="regin">
-            <navigator
-                open-type="reLaunch"
-                class="reg-btn"
-                url="/pages/login/reg"
-                hover-class="none"
-                >注册账号</navigator
-            >
+            <navigator open-type="reLaunch"
+                       class="reg-btn"
+                       url="/pages/login/reg"
+                       hover-class="none">注册账号</navigator>
         </view>
     </view>
 </template>
@@ -95,17 +84,17 @@ export default {
                             key: "userInfo",
                             data: res.data
                         });
-						this.$store.commit('SET_USERINFO', res.data)
-						uni.showToast({
-						    title: res.msg,
-						    icon: "none"
-						});
-						setTimeout(()=>{
-							this.webSocketConnect()
-							uni.reLaunch({
-							    url: "/pages/index/index"
-							});
-						})
+                        this.$store.commit('SET_USERINFO', res.data)
+                        uni.showToast({
+                            title: res.msg,
+                            icon: "none"
+                        });
+                        setTimeout(() => {
+                            this.webSocketConnect()
+                            uni.reLaunch({
+                                url: "/pages/index/index"
+                            });
+                        })
                     } else {
                         uni.showToast({
                             title: res.msg,

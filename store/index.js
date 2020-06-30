@@ -64,9 +64,10 @@ const store = new Vuex.Store({
 		SET_MSGLIST(state, val) {
 			if(val.type === 'add'){
 				state.chatDetaileList.push(val.item)
-				return
+			}else{
+				state.chatDetaileList = val.concat(state.chatDetaileList);
 			}
-		    state.chatDetaileList = val.concat(state.chatDetaileList);
+			console.log( state.chatDetaileList.length)
 			uni.$emit('receive_msg_list', state.chatDetaileList);
 			uni.$on('clear_msg_list', (data) => {
 				state.chatDetaileList = []

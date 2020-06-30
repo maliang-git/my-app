@@ -5,7 +5,7 @@
 			<view class="scroll-view-item user-item" v-for="(item, index) in chatList" :key="index" @click="goChat(item)">
 				<view class="head-portrait">
 					<min-badge class="badge" :count="item.unread_num"></min-badge>
-					<image class="user_head" src="../../static/defullt_img.png" mode=""></image>
+					<image class="user_head" src="../../static/defullt_head.jpg" mode=""></image>
 				</view>
 				<view class="name-msg">
 					<view class="name-time">

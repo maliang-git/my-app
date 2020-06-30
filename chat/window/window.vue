@@ -4,9 +4,10 @@
                      scroll-y="true"
                      class="scroll-Y"
                      id="scrollview"
-					 @scrolltoupper="scrolltoupperFn"
-					 @touchstart="hideKeyboard()">
-			<uLi-load-more v-if="moreStatus" :status="moreStatus"></uLi-load-more>
+                     @scrolltoupper="scrolltoupperFn"
+                     @touchstart="hideKeyboard()">
+            <uLi-load-more v-if="moreStatus"
+                           :status="moreStatus"></uLi-load-more>
             <view id="msglistview">
                 <view v-for="(item,index) in chatDetaileList"
                       :key="index"
@@ -14,9 +15,10 @@
                       :class="item.send_user._id ===  currentChatUser._id? '' : 'my-msg'"
                       v-if="item.send_user._id ===  currentChatUser._id || item.is_send">
                     <text class="time">{{ $time(new Date(item.create_time),"yyyy-MM-dd hh:mm:ss") }}</text>
-                    <view class="head-portrait" @click="">
+                    <view class="head-portrait"
+                          @click="">
                         <image class="user_head"
-                               src="../../static/defullt_img.png"
+                               src="../../static/defullt_head.jpg"
                                mode=""></image>
                     </view>
                     <view class="name-msg">
@@ -28,7 +30,7 @@
                 <view class="head-portrait">
                     <image
                         class="user_head"
-                        src="../../static/defullt_img.png"
+                        src="../../static/defullt_head.jpg"
                         mode=""
                     ></image>
                 </view>
@@ -43,21 +45,21 @@
                 <view class="head-portrait">
                     <image
                         class="user_head"
-                        src="../../static/defullt_img.png"
+                        src="../../static/defullt_head.jpg"
                         mode=""
                     ></image>
                 </view>
                 <view class="name-msg">
                     <view class="msg"
                         ><image
-                            src="../../static/defullt_img.png"
+                            src="../../static/defullt_head.jpg"
                             mode="aspectFit"
                         ></image
                     ></view>
                 </view>
             </view> -->
         </scroll-view>
-       <view class="input-content">
+        <view class="input-content">
             <view class="send-voice">
                 <uni-icons type="mic-filled"
                            size="30"></uni-icons>
@@ -90,7 +92,7 @@ export default {
     name: 'window',
     components: {
         minBadge,
-		uLiLoadMore
+        uLiLoadMore
     },
     data() {
         return {
@@ -100,31 +102,31 @@ export default {
             currentChatUser: {}, // 对方
             send_user: {}, // 我方
             messge: '',
-			moreStatus:'',
-			searchCriteria:{
-				page:1,
-				limit:15,
-				send_user: '',
-				to_user: '',
-			},
-			historyHeight:0
+            moreStatus: '',
+            searchCriteria: {
+                page: 1,
+                limit: 15,
+                send_user: '',
+                to_user: '',
+            },
+            historyHeight: 0
         };
     },
-	watch: {
-	    '$store.state.chatDetaileList'(val) {
-	        this.$nextTick(() => {
-	            this.chatDetaileList = val
-				setTimeout(this.scrollToBottom,100)
-	        })
-	    },
-		'$store.state.isLoading'(val) {
-			if(val){
-				this.moreStatus = 'loading'
-			}else{
-				this.moreStatus = ''
-			}
-	    },
-	},
+    watch: {
+        '$store.state.chatDetaileList'(val) {
+            this.$nextTick(() => {
+                this.chatDetaileList = val
+                setTimeout(this.scrollToBottom, 100)
+            })
+        },
+        '$store.state.isLoading'(val) {
+            if (val) {
+                this.moreStatus = 'loading'
+            } else {
+                this.moreStatus = ''
+            }
+        },
+    },
     mounted() {
         this.getChatList()
         this.getRoomInfo()
@@ -132,37 +134,37 @@ export default {
     onLoad() {
         this.send_user = uni.getStorageSync('userInfo')
         this.currentChatUser = uni.getStorageSync('currentChatUser')
-		uni.setNavigationBarTitle({
-		    title: this.currentChatUser.loginName
-		});
-		setTimeout(this.scrollToBottom,100)
+        uni.setNavigationBarTitle({
+            title: this.currentChatUser.loginName
+        });
+        setTimeout(this.scrollToBottom, 100)
     },
     methods: {
-		// 隐藏软键盘
-		hideKeyboard(){
-			uni.hideKeyboard()
-		},
-		// 加载更多
-		scrolltoupperFn(){
-			// 节流
-			if(this.$store.state.isLoading){
-				return
-			}
-			let totalPage = Math.ceil(this.$store.state.msgTotal / 15)
-			if(this.searchCriteria.page <  totalPage){
-				this.$store.commit("SET_LOADING", true); // 节流
-				this.searchCriteria.page += 1
-				this.getChatList()
-				
-				let query = uni.createSelectorQuery()
-				query.select('#msglistview').boundingClientRect()
-				query.select('#scrollview').boundingClientRect()
-				query.exec((res) => {
-					this.historyHeight = res[0].height - res[1].height + 200
-				})
-		
-			}
-		},
+        // 隐藏软键盘
+        hideKeyboard() {
+            uni.hideKeyboard()
+        },
+        // 加载更多
+        scrolltoupperFn() {
+            // 节流
+            if (this.$store.state.isLoading) {
+                return
+            }
+            let totalPage = Math.ceil(this.$store.state.msgTotal / 15)
+            if (this.searchCriteria.page < totalPage) {
+                this.$store.commit("SET_LOADING", true); // 节流
+                this.searchCriteria.page += 1
+                this.getChatList()
+
+                let query = uni.createSelectorQuery()
+                query.select('#msglistview').boundingClientRect()
+                query.select('#scrollview').boundingClientRect()
+                query.exec((res) => {
+                    this.historyHeight = res[0].height - res[1].height + 200
+                })
+
+            }
+        },
         // 获取当前房间信息
         getRoomInfo() {
             getApp().globalData.socketInfo.emit('get_room_info', {
@@ -179,23 +181,23 @@ export default {
             query.exec((res) => {
                 if (res[1].height > res[0].height) {
                     that.scrollTop = res[1].height - res[0].height + 100 - this.historyHeight
-					setTimeout(()=>{
-						this.$store.commit("SET_LOADING", false)
-					},200)
+                    setTimeout(() => {
+                        this.$store.commit("SET_LOADING", false)
+                    }, 200)
                 }
             })
         },
         // 获取消息列表
         getChatList() {
-			this.searchCriteria.send_user = this.send_user._id
-			this.searchCriteria.to_user = this.currentChatUser._id
-            getApp().globalData.socketInfo.emit('get_msg_list',this.searchCriteria);
+            this.searchCriteria.send_user = this.send_user._id
+            this.searchCriteria.to_user = this.currentChatUser._id
+            getApp().globalData.socketInfo.emit('get_msg_list', this.searchCriteria);
         },
         // 发送消息
         sendMessge() {
-			if(!this.messge){
-				return
-			}
+            if (!this.messge) {
+                return
+            }
             getApp().globalData.socketInfo.emit('send_messge', {
                 to_user: this.currentChatUser._id,
                 send_user: this.send_user._id,
@@ -209,10 +211,9 @@ export default {
             userId: this.send_user._id,
             roomId: this.$store.state.roomInfo._id,
         });
-		
-		this.$store.state.chatDetaileList = []
-		this.$store.commit("SET_MSGTOTAL", 0);
-		this.$store.commit("SET_LOADING", null);
+        this.$store.state.chatDetaileList = []
+        this.$store.commit("SET_MSGTOTAL", 0);
+        this.$store.commit("SET_LOADING", null);
     }
 };
 </script>
@@ -225,13 +226,13 @@ export default {
     width: 100%;
     height: 100vh;
     background-color: #eeeeee;
-	
+
     .scroll-Y {
         height: 100%;
         // padding-bottom: 110rpx;
         box-sizing: border-box;
-		padding-bottom: 110rpx;
-		margin-bottom: -1px;
+        padding-bottom: 110rpx;
+        margin-bottom: -1px;
         .have-time {
             position: relative;
             margin-top: 80rpx;
