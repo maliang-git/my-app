@@ -7,6 +7,10 @@
 		onLaunch: function() {
 			console.log('App Launch')
 			this.webSocketConnect()
+
+			// 持久化用户信息
+			let send_user = uni.getStorageSync('userInfo')
+			this.$store.commit("SET_USERINFO", send_user)
 		},
 		onShow: function() {
 			// var vConsole = new VConsole();

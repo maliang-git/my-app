@@ -12,7 +12,7 @@
 				<div class="user-item" v-if="item.send_user._id ===  currentChatUser._id || item.is_send">
 					<text class="time">{{ timeRest(new Date(item.create_time),"yyyy-MM-dd hh:mm:ss") }}</text>
 					<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-item' : 'my-msg-item'">
-						<div :class="item.send_user._id ===  currentChatUser._id ? 'head-portrait' : 'my-head'">
+						<div :class="item.send_user._id ===  currentChatUser._id ? 'head-portrait' : 'my-head'" @click="jumpDetiel(item.send_user)">
 							<image class="user-head" src="../../static/defullt_head.jpg" mode=""></image>
 						</div>
 						<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-content' : 'my-msg-content'">
@@ -142,6 +142,15 @@
 					this.searchCriteria.page += 1
 					this.getChatList()
 				}
+			},
+			// 跳转详情
+			jumpDetiel(item){
+				item.isFriend = 1
+				this.$store.commit('SEARCH_USER', item)
+				uni.navigateTo({
+					url: "/pages/friends/details",
+				});
+				console.log(item)
 			}
 		},
 		destroyed() {

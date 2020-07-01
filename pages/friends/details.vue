@@ -108,7 +108,7 @@ export default {
         };
     },
     onLoad() {
-
+		console.log(777,this.userDetails)
     },
     methods: {
         open() {

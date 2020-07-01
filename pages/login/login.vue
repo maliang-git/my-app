@@ -80,10 +80,6 @@ export default {
                 .then(res => {
                     uni.hideLoading();
                     if (res.code === 200) {
-                        uni.setStorage({
-                            key: "userInfo",
-                            data: res.data
-                        });
                         this.$store.commit('SET_USERINFO', res.data)
                         uni.showToast({
                             title: res.msg,

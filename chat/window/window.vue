@@ -16,7 +16,7 @@
                       v-if="item.send_user._id ===  currentChatUser._id || item.is_send">
                     <text class="time">{{ $time(new Date(item.create_time),"yyyy-MM-dd hh:mm:ss") }}</text>
                     <view class="head-portrait"
-                          @click="">
+                          @click="jumpDetiel(item.send_user)">
                         <image class="user_head"
                                src="../../static/defullt_head.jpg"
                                mode=""></image>
@@ -179,7 +179,7 @@ export default {
             query.select('#scrollview').boundingClientRect()
             query.select('#msglistview').boundingClientRect()
             query.exec((res) => {
-                if (res[1].height > res[0].height) {
+                if (res[1] && res[0] && res[1].height > res[0].height) {
                     that.scrollTop = res[1].height - res[0].height + 100 - this.historyHeight
                     setTimeout(() => {
                         this.$store.commit("SET_LOADING", false)
@@ -204,7 +204,15 @@ export default {
                 messge: this.messge
             });
             this.messge = ''
-        }
+        },
+		// 跳转详情
+		jumpDetiel(item){
+			item.isFriend = 1
+			this.$store.commit('SEARCH_USER', item)
+			uni.navigateTo({
+				url: "/pages/friends/details",
+			});
+		}
     },
     destroyed() {
         getApp().globalData.socketInfo.emit('update_room_msg_read', {

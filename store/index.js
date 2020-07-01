@@ -17,7 +17,9 @@ const store = new Vuex.Store({
     },
     mutations: {
         SET_USERINFO(state, val) {
+			console.log('stor',val)
             state.userInfo = val;
+			uni.setStorageSync("userInfo",val)
         },
         SEARCH_USER(state, val) {
             state.searchUser = val;
