@@ -13,7 +13,7 @@
 					<text class="time">{{ timeRest(new Date(item.create_time),"yyyy-MM-dd hh:mm:ss") }}</text>
 					<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-item' : 'my-msg-item'">
 						<div :class="item.send_user._id ===  currentChatUser._id ? 'head-portrait' : 'my-head'" @click="jumpDetiel(item.send_user)">
-							<image class="user-head" src="../../static/defullt_head.jpg" mode=""></image>
+							<image class="user-head" :src="item.send_user.headImg || '../../static/defullt_head.jpg'" mode=""></image>
 						</div>
 						<div :class="item.send_user._id ===  currentChatUser._id ? 'msg-content' : 'my-msg-content'">
 							<text :class="item.send_user._id ===  currentChatUser._id ? 'msg' : 'my-msg'">

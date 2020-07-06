@@ -15,7 +15,7 @@
 			</view>
 			<view class="fn-item" v-for="(item, index) in $store.state.myFriendList" :key="item+index" @click="goChat(item.user_b)">
 				<view class="icon-box">
-					<image class="user_head" src="../../static/defullt_head.jpg" mode=""></image>
+					<image class="user_head" :src="item.user_b.headImg || '../../static/defullt_head.jpg'" mode=""></image>
 				</view>
 				<text>{{ item.user_b.loginName }}</text>
 			</view>

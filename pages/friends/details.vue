@@ -3,7 +3,7 @@
         <view class="details-top">
             <view class="user-info">
                 <view class="user-head">
-                    <image src="../../static/defullt_head.jpg"
+                    <image :src="userDetails.headImg || '../../static/defullt_head.jpg'"
                            mode=""></image>
                 </view>
                 <view class="user-other">

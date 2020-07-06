@@ -4,7 +4,9 @@
 			<fn-item v-for="(item,index) in setList" :key="index" :title="item.text" :height="index===0?'140':'100'" :noBorder="index===0"
 			 @click.native="editData(item)">
 				<view v-if="item.code==='head'" class="img-list">
-					<image src="../../static/defullt_head.jpg" mode=""></image>
+					<view class="head-img">
+						<image :src="userInfo.headImg || ''" mode="aspectFit"></image>
+					</view>
 				</view>
 				<view v-if="item.code==='name'" class="item-text">
 					<text>{{userInfo.loginName}}</text>
@@ -30,6 +32,11 @@
 						<text>{{setTitle}}</text>
 						<button :disabled="!formData.keyWords" class="set-btn" type="primary" @click="setUserInfoFn">完成</button>
 					</view>
+					<!-- s 上传头像 -->
+					<!-- <view v-if="formData.editType==='head'" class="w-upload">
+						<progress :percent="percent" stroke-width="10"></progress>
+						<button type="primary" :loading="loading" :disabled="disabled" @click="uploadimg">选择照片</button>
+					</view> -->
 					<!-- s 设置昵称 -->
 					<input v-if="formData.editType==='name'" type="text" v-model="formData.keyWords" placeholder="输入昵称" />
 					<!-- s 设置性别 -->
@@ -64,10 +71,13 @@
 			uniPopup,
 			uniPopupMessage,
 			uniPopupDialog,
-			simpleAddress
+			simpleAddress,
 		},
 		data() {
 			return {
+					 percent:0,
+					  loading:false,
+					  disabled:false,
 				userInfo: {},
 				setList: [{
 						text: '头像',
@@ -156,6 +166,12 @@
 			})
 		},
 		methods: {
+			//跳转图片上传
+			goUpload(height,valueName){
+				uni.navigateTo({
+					url: '/pages/my/uploadImage?height='+height+'&valueName='+valueName
+				});
+			},
 			signOut() {
 				uni.showLoading();
 				// 退出登录
@@ -186,6 +202,11 @@
 			},
 			editData(item) {
 				this.formData.editType = item.code
+				if(item.code === 'head'){
+					console.log(this.userInfo)
+					this.goUpload(300,this.userInfo.headImg)
+					return
+				}
 				if(item.code === 'region'){
 					this.cityPickerValueDefault = this.userInfo.cityInfo ? this.userInfo.cityInfo.value : [0,0,0]
 					this.$refs.simpleAddress.open();
@@ -244,15 +265,16 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: flex-end;
-		flex-wrap: wrap;
-		overflow: hidden;
 		padding: 0 20rpx;
-		box-sizing: border-box;
-
-		image {
-			max-width: 100rpx;
-			max-height: 100rpx;
-			margin-left: 10rpx;
+		.head-img{
+			width: 120rpx;
+			height: 120rpx;
+			overflow: hidden;
+			box-sizing: border-box;
+				image {
+					width: 100%;
+					height: 100%;
+				}
 		}
 	}
 

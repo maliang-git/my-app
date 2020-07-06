@@ -18,7 +18,7 @@
                     <view class="head-portrait"
                           @click="jumpDetiel(item.send_user)">
                         <image class="user_head"
-                               src="../../static/defullt_head.jpg"
+                               :src="item.send_user.headImg || '../../static/defullt_head.jpg'"
                                mode=""></image>
                     </view>
                     <view class="name-msg">

@@ -1,10 +1,10 @@
 <template>
 	<view class="content">
 		<view class="my-content-top">
-			<view class="my-bg"></view>
+			<view class="my-bg" :style='{backgroundImage:"url(" +  userInfo.headImg + ")"}'></view>
 			<view class="my-header-content">
 				<view class="my-header">
-					<image class="user_head" src="../../static/defullt_head.jpg" mode=""></image>
+					<image class="user_head" :src="userInfo.headImg" mode=""></image>
 				</view>
 			</view>
 			<view class="my-info-content">
@@ -90,7 +90,6 @@
 			top: 0;
 			width: 100%;
 			height: 100%;
-			background: url(../../static/defullt_head.jpg);
 			background-repeat: no-repeat;
 			background-position: center;
 			background-size: cover;
