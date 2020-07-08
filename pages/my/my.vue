@@ -13,7 +13,7 @@
 					<text class="user-login">账号：{{userInfo.phone}}</text>
 					<view class="city">
 						<text>{{ userInfo.gender || '--'}}</text>
-						<text>{{ userInfo.cityInfo ? (userInfo.cityInfo.cityCode === "1101" || "1201" ? userInfo.cityInfo.labelArr[0] : userInfo.cityInfo.labelArr[1]) : '--'}}</text>
+						<text>{{ userInfo.cityInfo ? (userInfo.cityInfo.cityCode === "1101" || userInfo.cityInfo.cityCode === "1201" ? userInfo.cityInfo.labelArr[0] : userInfo.cityInfo.labelArr[1]) : '--'}}</text>
 					</view>
 					<text class="autograph">{{userInfo.autograph || ''}}</text>
 				</view>

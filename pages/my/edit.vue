@@ -5,7 +5,7 @@
 			 @click.native="editData(item)">
 				<view v-if="item.code==='head'" class="img-list">
 					<view class="head-img">
-						<image :src="userInfo.headImg || ''" mode="aspectFit"></image>
+						<image :src="userInfo.headImg || ''" mode="widthFix"></image>
 					</view>
 				</view>
 				<view v-if="item.code==='name'" class="item-text">
@@ -169,7 +169,7 @@
 			//跳转图片上传
 			goUpload(height,valueName){
 				uni.navigateTo({
-					url: '/pages/my/uploadImage?height='+height+'&valueName='+valueName
+					url: '/pages/my/shear?height='+height+'&valueName='+valueName
 				});
 			},
 			signOut() {

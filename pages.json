@@ -75,7 +75,16 @@
 				}
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/my/shear",
+            "style": {
+            	"navigationBarTitleText": "移动和缩放",
+            	"navigationBarBackgroundColor":"#000",
+            	"navigationBarTextStyle":"white",
+				"backgroundColor":"#000"
+            }
+        }
+    ],
 	"subPackages": [{
 		"root": "chat",
 		"pages": [{
@@ -117,7 +126,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "my-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#eeeeee"
+		"backgroundColor": "#FFF"
 	},
 	"app-plus": {
 		"softinputMode": "adjustResize"
