@@ -1,0 +1,76 @@
+<template>
+	<view class="page-content" @panstart="touchstartHandle" @panmove="moveHandle">
+		<view class="mantle" :style="{width:mantleInfo.width+'px',height:mantleInfo.height+'px',top:mantleInfo.top + 'px',left:mantleInfo.left + 'px',}">
+		</view>
+		<image class="user_head" src="../../static/2.png" mode="aspectFit"></image>
+		<!-- <canvas canvas-id='myCanvas'></canvas> -->
+		<!-- 		<movable-area :style="{width:cropBorder.size+'px',height:cropBorder.size+'px',top:cropBorder.y+'px',left:cropBorder.x+'px'}">
+			<movable-view :style="{width:imgInfo.width+'px',height:imgInfo.height+'px'}" direction="all" scale="true"
+			 out-of-bounds="true">
+				<image class="user_head" src="../../static/2.png" :mode="imgMode"></image>
+			</movable-view>
+		</movable-area> -->
+	</view>
+</template>
+<script>
+	export default {
+		data() {
+			return {
+				systemInfo: {},
+				mantleInfo: {
+					width: 20,
+					height: 20,
+					top: 0,
+					left: 0
+				}
+			}
+		},
+		onLoad(options) {
+			// 获取设备信息
+			this.systemInfo = uni.getSystemInfoSync()
+			// 设置切图参照框的大小，位置
+			this.mantleInfo.width = this.systemInfo.screenWidth * 0.9
+			this.mantleInfo.height = this.mantleInfo.width
+			this.mantleInfo.top = (this.systemInfo.screenHeight - 40 - this.mantleInfo.height) >> 1
+			this.mantleInfo.left = (this.systemInfo.screenWidth - this.mantleInfo.width) >> 1
+		},
+		onReady() {
+
+		},
+		mounted() {
+
+		},
+		methods: {
+			touchstartHandle(e){
+				console.log(e.touches)
+			},
+			moveHandle(e){
+				console.log(e)
+			}
+		}
+	}
+</script>
+
+<style scoped>
+	.page-content {
+		flex: 1;
+		background-color: #000;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.mantle {
+		position: fixed;
+		border-width: 2rpx;
+		border-style: solid;
+		border-color: #fff;
+	}
+
+	/* 	canvas {
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		left: 0;
+		top: 0;
+	} */
+</style>

@@ -15,7 +15,7 @@
 				height: null,
 				showUpload: false,
 				upImage: null,
-				isShow:false
+				isShow: false
 			}
 		},
 		onNavigationBarButtonTap() {
@@ -34,9 +34,18 @@
 					count: 1,
 					sizeType: ['original', 'compressed'],
 					success: function(res) {
-						that.showUpload = true;
-						that.upImage = res.tempFilePaths[0];
-						that.isShow = true
+						console.log(res)
+						// that.showUpload = true;
+						// that.upImage = res.tempFilePaths[0];
+						// that.isShow = true
+						uni.getImageInfo({
+							src: res.tempFilePaths[0],
+							success(res) {
+								uni.navigateTo({
+									url: '/pages/my/shear?data=' + JSON.stringify(res)
+								})
+							}
+						})
 					}
 				})
 			},
@@ -66,13 +75,13 @@
 							icon: "none"
 						});
 						that.$store.commit("SET_USERINFO", data.data)
-						setTimeout(()=>{
+						setTimeout(() => {
 							that.upImage = null
 							that.isShow = false
 							uni.navigateBack({
-							    delta: 1
+								delta: 1
 							});
-						},500)
+						}, 500)
 						console.log(data);
 					},
 				});
@@ -84,11 +93,11 @@
 				});
 			},
 			// 取消上传
-			outputImg(){
+			outputImg() {
 				this.upImage = null
 				this.isShow = false
 				uni.navigateBack({
-				    delta: 1
+					delta: 1
 				});
 			}
 		}
